@@ -28,14 +28,14 @@ int main(int argc, char* argv[])
 
 	for (int val = 1; val <= 4; val++)
 	{
-		urlString.insert((urlString.indexOf("cd=1") + 4), "&p=" + QString::number(page));
+		QString temporaryUrl = urlString.insert((urlString.indexOf("cd=1") + 4), "&p=" + QString::number(page));
 
 		QEventLoop loop;
 
 		QObject::connect(&nam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
 
 		//QSharedPointer<QNetworkReply>reply(nam.get(QNetworkRequest(QUrl("https://www.avito.ru/nizhnevartovsk?cd=1&q=ps5+vr2"))));
-		QSharedPointer<QNetworkReply>reply(nam.get(QNetworkRequest(QUrl(urlString))));
+		QSharedPointer<QNetworkReply>reply(nam.get(QNetworkRequest(QUrl(temporaryUrl))));
 
 		loop.exec();
 
@@ -100,6 +100,8 @@ int main(int argc, char* argv[])
 	{
 		qDebug() << val;
 	}
+
+	qDebug() << "\n" << "Count of reference: " + QString::number(referenceList.length());
 
 	a.exec();
 	
