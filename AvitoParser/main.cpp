@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
 
 		QFile file("BUFFER.txt");
 
-		//if (!(file.open(QIODevice::WriteOnly | QIODevice::Append))) // Append - для добавления содержимого в файла
-		if (!(file.open(QIODevice::WriteOnly | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
+		if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - для добавления содержимого в файла
+		//if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
 		{
 			qDebug() << file.error();
 		}
@@ -54,13 +54,8 @@ int main(int argc, char* argv[])
 		QTextStream in(&file);
 
 		in << reply->readAll() << Qt::endl;
-
-		file.close();
-
-		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-		{
-			qDebug() << file.error();
-		}
+		
+		in.seek(0);
 
 		while (!in.atEnd())
 		{
