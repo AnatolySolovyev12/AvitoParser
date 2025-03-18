@@ -10,12 +10,18 @@ int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
 
-	//AvitoParser w;
-	//w.show();
+	AvitoParser w;
+	w.show();
+
+
+
+	/*
+
+
 
 	//QList<QNetworkReply::RawHeaderPair> testListSecond;
 	//QList<QByteArray> testList;
-
+	
 	QList<QString>referenceList;
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
@@ -24,9 +30,9 @@ int main(int argc, char* argv[])
 
 	//QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?cd=1&q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5"; // обычный запрос
 	QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?cd=1&q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5&s=104"; // обычный с сортировкой по дате
-	//QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5+VR2&s=104"; // обычный с сортировкой по дате
+
+	//QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5+VR2&s=104"; // обычный с сортировкой по дате VR
 	
-	//QString urlString = "https://www.avito.ru/nizhnevartovsk/telefony/mobilnye_telefony/huawei-ASgBAgICAkS0wA3wrjmwwQ2I_Dc?q=%D1%82%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD+Huawei+p&s=104"; // обычный с сортировкой по дате
 
 	//int page = 1;// при многостраничном поиске
 	//for (int val = 1; val <= 4; val++) // при многостраничном поиске
@@ -106,13 +112,16 @@ int main(int argc, char* argv[])
 	qDebug() << "\n" << "Count of reference: " + QString::number(referenceList.length());
 
 
+
+	*/
+
+
+
+
 	a.exec();
 
 	return 0;
 }
-
-
-
 
 
 
