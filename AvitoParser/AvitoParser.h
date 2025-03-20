@@ -11,6 +11,8 @@
 #include <QtSql/QtSql>
 #include <QTableWidgetItem>
 
+#include <QMouseEvent>
+
 class AvitoParser : public QMainWindow
 {
     Q_OBJECT
@@ -19,11 +21,6 @@ public:
 
     AvitoParser(QWidget* parent = nullptr);
     ~AvitoParser();
-
-
-
-   // VisualForMilanRF(QWidget* parent = nullptr);
-   // ~VisualForMilanRF();
 
     void addItemInList();
     void deleteItemInList();
@@ -41,6 +38,8 @@ public:
     void startingImportXml();
     void showRangeTable();
     void sortTable();
+
+    void mousePressEvent(QMouseEvent* event);
 
 private slots:
     void setData();

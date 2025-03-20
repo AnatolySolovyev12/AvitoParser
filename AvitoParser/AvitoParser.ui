@@ -284,41 +284,6 @@
       <string>StartingValueHot</string>
      </property>
     </column>
-    <item>
-     <property name="text">
-      <string>General</string>
-     </property>
-     <property name="background">
-      <brush brushstyle="NoBrush">
-       <color alpha="255">
-        <red>213</red>
-        <green>213</green>
-        <blue>213</blue>
-       </color>
-      </brush>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </item>
    </widget>
    <widget class="Line" name="line_6">
     <property name="geometry">

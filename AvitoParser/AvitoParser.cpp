@@ -11,6 +11,7 @@ AvitoParser::AvitoParser(QWidget* parent)
 	connect(ui.treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(setData()));
 	connect(ui.treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(closeEditor(QTreeWidgetItem*)));
 	connect(ui.treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(otherItemWasChecked(QTreeWidgetItem*)));
+
 	connect(ui.pushButtonFinder, &QPushButton::clicked, this, &AvitoParser::adressFinder);
 	connect(ui.pushButtonExport, &QPushButton::clicked, this, &AvitoParser::exportXml);
 	connect(ui.pushButtonImport, &QPushButton::clicked, this, &AvitoParser::importXml);
@@ -56,13 +57,16 @@ void AvitoParser::addItemInList()
 
 void AvitoParser::deleteItemInList()
 {
+	if (ui.treeWidget->currentItem() == nullptr) return;
+
 	QTreeWidgetItem* taked = ui.treeWidget->currentItem();
-	QTreeWidgetItem* parentTaked = taked->parent();
 
-	if (parentTaked == nullptr)
-		return;
+	QTreeWidgetItem* parent = taked->parent();
 
-	parentTaked->takeChild(parentTaked->indexOfChild(taked));
+	if (taked->parent() == nullptr)
+		ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(taked));
+	else
+		parent->takeChild(parent->indexOfChild(taked));
 }
 
 
@@ -73,7 +77,7 @@ void AvitoParser::setData() // в случае двойного клика в €чейку открываем редакт
 
 	if (column == 3 || column == 4 || column == 5 || column == 6 || column == 7) return; // не даЄм редактировать дальше третьего столбца            
 
-   // qDebug() << "OPEN EDITOR";
+	//qDebug() << "OPEN EDITOR";
 
 	middleColumn = column;
 	middleItem = any;
@@ -151,7 +155,7 @@ void AvitoParser::otherItemWasChecked(QTreeWidgetItem* any) // закрываем открыты
 	if (offChanger) return;
 
 	int column = ui.treeWidget->currentColumn();
-	// qDebug() << "Checked " << any->text(column);
+	qDebug() << "Checked " << any->text(column);/////////////////////////
 
 	if (any == middleItem && column == middleColumn)
 		return;
@@ -671,7 +675,7 @@ void AvitoParser::report()
 
 	excelDonor = new QAxObject("Excel.Application", 0);
 	workbooksDonor = excelDonor->querySubObject("Workbooks");
-	workbookDonor = workbooksDonor->querySubObject("Open(const QString&)", savedFile); // 
+	workbookDonor = workbooksDonor->querySubObject("Open(const QString&)", savedFile); //
 	sheetsDonor = workbookDonor->querySubObject("Worksheets");
 	int listDonor = sheetsDonor->property("Count").toInt();
 	sheetDonor = sheetsDonor->querySubObject("Item(int)", listDonor);// “ут определ€ем лист с которым будем работаь
@@ -808,3 +812,13 @@ void AvitoParser::sortTable()
 		sortBool = !sortBool;
 	}
 }
+
+
+
+void AvitoParser::mousePressEvent(QMouseEvent* event) {
+	if (event->button() == Qt::LeftButton) {
+
+		ui.treeWidget->setCurrentItem(ui.treeWidget->invisibleRootItem());
+	}
+}
+
