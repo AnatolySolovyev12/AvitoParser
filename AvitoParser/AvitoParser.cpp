@@ -236,14 +236,22 @@ void AvitoParser::exportXml()
 	xmlWriter.setAutoFormattingIndent(2); // задаём количество пробелов в отступе (по умолчанию 4)
 	xmlWriter.writeStartDocument(); // пишет в шапке кодировку документа
 
-	QTreeWidgetItem* any = ui.treeWidget->topLevelItem(0);
 
-	if (any)
+
+	int countOfTopItems = ui.treeWidget->topLevelItemCount();
+
+	if (countOfTopItems)
 	{
-		recursionXmlWriter(any, xmlWriter);
+		for (int val = 0; val < countOfTopItems; val++)
+		{
 
-		xmlWriter.writeEndElement(); // General
-		xmlWriter.writeEndDocument();
+			QTreeWidgetItem* any = ui.treeWidget->topLevelItem(val);
+
+			recursionXmlWriter(any, xmlWriter);
+
+			xmlWriter.writeEndElement(); // General
+			xmlWriter.writeEndDocument();
+		}
 	}
 
 	file.close();
@@ -368,19 +376,23 @@ void AvitoParser::importXml()
 }
 
 
-void AvitoParser::loopXmlReader(QTreeWidgetItem* some, QXmlStreamReader& xmlReader)
+void AvitoParser::loopXmlReader(QTreeWidgetItem* any, QXmlStreamReader& xmlReader)
 {
 	QList <QTreeWidgetItem*> myList;
+
+	QTreeWidgetItem* some = any;
+
+	int count = 0;
 
 	myList.push_back(some);
 
 	while (!xmlReader.atEnd())
 	{
-		xmlReader.readNextStartElement();
+		xmlReader.readNext();
 
 		if (xmlReader.isStartElement())
 		{
-			if (some == ui.treeWidget->topLevelItem(0))
+			if (some == ui.treeWidget->invisibleRootItem())
 			{
 				some = new QTreeWidgetItem(ui.treeWidget);
 			}
@@ -806,12 +818,20 @@ void AvitoParser::sortTable()
 {
 	if (sortBool)
 	{
-		ui.treeWidget->currentItem()->sortChildren(ui.treeWidget->currentColumn(), Qt::AscendingOrder);
+		if (ui.treeWidget->currentItem() == nullptr)
+			ui.treeWidget->sortItems(0, Qt::AscendingOrder);
+		else
+			ui.treeWidget->currentItem()->sortChildren(ui.treeWidget->currentColumn(), Qt::AscendingOrder);
+
 		sortBool = !sortBool;
 	}
 	else
 	{
-		ui.treeWidget->currentItem()->sortChildren(ui.treeWidget->currentColumn(), Qt::DescendingOrder);
+		if (ui.treeWidget->currentItem() == nullptr)
+			ui.treeWidget->sortItems(0, Qt::DescendingOrder);
+		else
+			ui.treeWidget->currentItem()->sortChildren(ui.treeWidget->currentColumn(), Qt::DescendingOrder);
+
 		sortBool = !sortBool;
 	}
 }
