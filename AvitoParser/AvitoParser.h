@@ -28,7 +28,7 @@ public:
     void exportXml();
     void recursionXmlWriter(QTreeWidgetItem * some, QXmlStreamWriter& someXmlWriter);
     void importXml();
-    void loopXmlReader(QTreeWidgetItem* some, QXmlStreamReader& xmlReader);
+    void loopXmlReader(QXmlStreamReader& xmlReader);
     //void loopXmlReader(QTreeWidgetItem* some, int count, QXmlStreamReader& xmlReader);
 
     void refresh();

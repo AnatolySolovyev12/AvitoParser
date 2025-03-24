@@ -350,9 +350,7 @@ void AvitoParser::importXml()
 
 	file.open(QFile::ReadWrite);
 
-	QTreeWidgetItem* any = ui.treeWidget->topLevelItem(0);
-
-	loopXmlReader(any, xmlReader);
+	loopXmlReader(xmlReader);
 
 	file.close();
 
@@ -376,25 +374,30 @@ void AvitoParser::importXml()
 }
 
 
-void AvitoParser::loopXmlReader(QTreeWidgetItem* any, QXmlStreamReader& xmlReader)
+void AvitoParser::loopXmlReader(QXmlStreamReader& xmlReader)
 {
 	QList <QTreeWidgetItem*> myList;
 
-	QTreeWidgetItem* some = any;
+	QTreeWidgetItem* some = nullptr;;
 
 	int count = 0;
 
-	myList.push_back(some);
+	//myList.push_back(some);
 
 	while (!xmlReader.atEnd())
 	{
-		xmlReader.readNext();
+		if (xmlReader.readNext() == QXmlStreamReader::PrematureEndOfDocumentError)
+		{
+			qDebug() << "Hmmm" << count;
+
+		}
 
 		if (xmlReader.isStartElement())
 		{
-			if (some == ui.treeWidget->invisibleRootItem())
+			if (myList.length() == 0)
 			{
 				some = new QTreeWidgetItem(ui.treeWidget);
+				count++;
 			}
 			else
 				some = new QTreeWidgetItem(myList.constLast());
@@ -462,7 +465,14 @@ void AvitoParser::loopXmlReader(QTreeWidgetItem* any, QXmlStreamReader& xmlReade
 			myList.pop_back();
 	}
 
-	ui.treeWidget->takeTopLevelItem(0);
+	/*
+	if (xmlReader.readNext() == QXmlStreamReader::PrematureEndOfDocumentError)
+	{
+		qDebug() << "Hmmm";
+	}
+	else
+		return;
+*/
 }
 
 
@@ -792,9 +802,7 @@ void AvitoParser::startingImportXml()
 
 	QXmlStreamReader xmlReader(&xmlFile);
 
-	QTreeWidgetItem* any = ui.treeWidget->topLevelItem(0);
-
-	loopXmlReader(any, xmlReader);
+	loopXmlReader(xmlReader);
 
 	xmlFile.close();
 }
