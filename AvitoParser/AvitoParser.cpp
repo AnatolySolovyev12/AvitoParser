@@ -236,8 +236,6 @@ void AvitoParser::exportXml()
 	xmlWriter.setAutoFormattingIndent(2); // задаём количество пробелов в отступе (по умолчанию 4)
 	xmlWriter.writeStartDocument(); // пишет в шапке кодировку документа
 
-
-
 	int countOfTopItems = ui.treeWidget->topLevelItemCount();
 
 	if (countOfTopItems)
@@ -249,10 +247,11 @@ void AvitoParser::exportXml()
 
 			recursionXmlWriter(any, xmlWriter);
 
-			xmlWriter.writeEndElement(); // General
-			xmlWriter.writeEndDocument();
+			xmlWriter.writeEndElement(); 
 		}
 	}
+
+	xmlWriter.writeEndDocument();
 
 	file.close();
 }
@@ -260,6 +259,7 @@ void AvitoParser::exportXml()
 
 void AvitoParser::recursionXmlWriter(QTreeWidgetItem* some, QXmlStreamWriter& someXmlWriter)
 {
+
 	if (some->childCount())
 	{
 		someXmlWriter.writeStartElement("Point"); // отркывает начальный элемент "лестницы" xml
@@ -380,24 +380,29 @@ void AvitoParser::loopXmlReader(QXmlStreamReader& xmlReader)
 
 	QTreeWidgetItem* some = nullptr;;
 
-	int count = 0;
-
-	//myList.push_back(some);
+	ui.treeWidget->clear(); // очищаем дерево перед загрузкой новых данных
 
 	while (!xmlReader.atEnd())
 	{
-		if (xmlReader.readNext() == QXmlStreamReader::PrematureEndOfDocumentError)
+
+		if (xmlReader.readNext() == xmlReader.error())
+			qDebug() << xmlReader.error();
+
+
+		/*
+		if (xmlReader.readNextStartElement())
 		{
-			qDebug() << "Hmmm" << count;
-
+			QString first = QString("'%1'")
+			.arg(xmlReader.name());
+		  
 		}
-
+		*/
+		
 		if (xmlReader.isStartElement())
 		{
 			if (myList.length() == 0)
 			{
 				some = new QTreeWidgetItem(ui.treeWidget);
-				count++;
 			}
 			else
 				some = new QTreeWidgetItem(myList.constLast());
@@ -465,14 +470,19 @@ void AvitoParser::loopXmlReader(QXmlStreamReader& xmlReader)
 			myList.pop_back();
 	}
 
-	/*
-	if (xmlReader.readNext() == QXmlStreamReader::PrematureEndOfDocumentError)
+	if (xmlReader.readNext() == xmlReader.isStartElement())
 	{
-		qDebug() << "Hmmm";
+
+			qDebug() << "Hmmm";
+
+
+
 	}
 	else
-		return;
-*/
+	{
+		qDebug() << "Error vse je";
+	}
+
 }
 
 
