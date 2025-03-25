@@ -179,7 +179,7 @@ void AvitoParser::recursionXmlWriter(QTreeWidgetItem* some, QXmlStreamWriter& so
 
 		if (some->text(2) != nullptr)
 		{
-			if (some->checkState(4) == Qt::Unchecked)
+			if (some->checkState(3) == Qt::Unchecked)
 				someXmlWriter.writeAttribute("Active", "0");
 			else
 				someXmlWriter.writeAttribute("Active", "1");
@@ -206,25 +206,11 @@ void AvitoParser::recursionXmlWriter(QTreeWidgetItem* some, QXmlStreamWriter& so
 
 		if (some->text(2) != nullptr)
 		{
-			if (some->checkState(4) == Qt::Unchecked)
+			if (some->checkState(3) == Qt::Unchecked)
 				someXmlWriter.writeAttribute("Active", "0");
 			else
 				someXmlWriter.writeAttribute("Active", "1");
-			/*
-			for (int count = 4; count <= 7; count++)
-			{
-				QString temporary = "Active";
-				QString middleStr;
-				middleStr.setNum(count - 3);
-				temporary += middleStr;
-
-
-			}
-			*/
 		}
-
-		//someXmlWriter.writeAttribute("StartingValueCold", some->text(8));
-		//someXmlWriter.writeAttribute("StartingValueHot", some->text(9));
 
 		someXmlWriter.writeEndElement();
 
@@ -316,9 +302,9 @@ void AvitoParser::loopXmlReader(QXmlStreamReader& xmlReader)
 				if (val.name().toString() == "Active")
 				{
 					if (val.value().toString() == "1")
-						some->setCheckState(4, Qt::Checked);
+						some->setCheckState(3, Qt::Checked);
 					else
-						some->setCheckState(4, Qt::Unchecked);
+						some->setCheckState(3, Qt::Unchecked);
 				}
 			}
 
