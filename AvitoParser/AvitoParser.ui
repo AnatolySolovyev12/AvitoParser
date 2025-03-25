@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1191</width>
+    <width>603</width>
     <height>494</height>
    </rect>
   </property>
@@ -14,59 +14,11 @@
    <string>AvitoParser</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButtonFinder">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>20</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Searches for a value in the selected column and displays its location in the tree</string>
-    </property>
-    <property name="text">
-     <string>Fd</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButtonRange">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>310</y>
-      <width>20</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display the device value in tabular form&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Ra</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButtonTest">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>220</y>
-      <width>20</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Update values for objects in the tree</string>
-    </property>
-    <property name="text">
-     <string>Rf</string>
-    </property>
-   </widget>
    <widget class="Line" name="line_3">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>130</y>
       <width>41</width>
       <height>16</height>
      </rect>
@@ -80,19 +32,6 @@
      <rect>
       <x>10</x>
       <y>60</y>
-      <width>41</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_5">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>290</y>
       <width>41</width>
       <height>16</height>
      </rect>
@@ -117,56 +56,11 @@
      <string>-</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonReport">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>270</y>
-      <width>20</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;We unload the XLS report with the current values of the object tree&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Rp</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButtonBrowse">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>190</y>
-      <width>20</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Specify the SQLite database</string>
-    </property>
-    <property name="text">
-     <string>Br</string>
-    </property>
-   </widget>
-   <widget class="Line" name="line_4">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>250</y>
-      <width>41</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButtonExport">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>150</y>
+      <y>110</y>
       <width>20</width>
       <height>20</height>
      </rect>
@@ -178,24 +72,11 @@
      <string>Ex</string>
     </property>
    </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>41</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButtonImport">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>120</y>
+      <y>80</y>
       <width>20</width>
       <height>20</height>
      </rect>
@@ -210,10 +91,10 @@
    <widget class="QTreeWidget" name="treeWidget">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>10</y>
-      <width>1101</width>
-      <height>421</height>
+      <x>60</x>
+      <y>0</y>
+      <width>521</width>
+      <height>441</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -236,83 +117,24 @@
     </property>
     <column>
      <property name="text">
-      <string>Adress</string>
+      <string>Name</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>ID</string>
+      <string>Reference</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Number</string>
+      <string>Update (sec)</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Date</string>
+      <string>Active</string>
      </property>
     </column>
-    <column>
-     <property name="text">
-      <string>Channel 1</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Channel 2</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Channel 3</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Channel 4</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>StartingValueCold</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>StartingValueHot</string>
-     </property>
-    </column>
-   </widget>
-   <widget class="Line" name="line_6">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>330</y>
-      <width>41</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButtonSort">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>350</y>
-      <width>20</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display the device value in tabular form&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Sr</string>
-    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonAdd">
     <property name="geometry">
@@ -330,13 +152,20 @@
      <string>+</string>
     </property>
    </widget>
+   <zorder>line_3</zorder>
+   <zorder>line_2</zorder>
+   <zorder>pushButtonAddMinus</zorder>
+   <zorder>pushButtonExport</zorder>
+   <zorder>pushButtonImport</zorder>
+   <zorder>pushButtonAdd</zorder>
+   <zorder>treeWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1191</width>
+     <width>603</width>
      <height>22</height>
     </rect>
    </property>

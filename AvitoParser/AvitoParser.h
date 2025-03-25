@@ -24,22 +24,13 @@ public:
 
     void addItemInList();
     void deleteItemInList();
-    void adressFinder();
+   
     void exportXml();
     void recursionXmlWriter(QTreeWidgetItem * some, QXmlStreamWriter& someXmlWriter);
+   
     void importXml();
     void loopXmlReader(QXmlStreamReader& xmlReader);
-    //void loopXmlReader(QTreeWidgetItem* some, int count, QXmlStreamReader& xmlReader);
-
-    void refresh();
-    bool connectDB();
-    void recursionDbSqlReader(QTreeWidgetItem* some);
-    void browse();
-    void recursionXlsWriter(QTreeWidgetItem* some);
-    void report();
     void startingImportXml();
-    void showRangeTable();
-    void sortTable();
 
     void mousePressEvent(QMouseEvent* event);
 
