@@ -13,6 +13,8 @@
 
 #include <QMouseEvent>
 
+#include <uniqueParseObject.h>
+
 class AvitoParser : public QMainWindow
 {
     Q_OBJECT
@@ -34,6 +36,11 @@ public:
 
     void mousePressEvent(QMouseEvent* event);
 
+    void initializationPoolFunc();
+
+
+
+
 private slots:
     void setData();
     void closeEditor(QTreeWidgetItem* any);
@@ -53,4 +60,7 @@ private:
     QStatusBar* sBar;
 
     bool sortBool = true;
+
+    QList<QSharedPointer<uniqueParseObject>>poolParse;
+
 };

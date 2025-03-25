@@ -1,13 +1,9 @@
 #include "uniqueParseObject.h"
 
 uniqueParseObject::uniqueParseObject(QObject *parent)
-	: QObject(parent)
+	: QObject(parent), classTimer(new QTimer())
 {
-
-
-
-
-
+	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
 
 }
 
@@ -106,4 +102,25 @@ void uniqueParseObject::generalParseFunc()
 	}
 
 	qDebug() << "\n" << "Count of reference: " + QString::number(referenceList.length());
+}
+
+
+void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond, bool checkParse)
+{
+	m_name = name;
+	m_URL = URL;
+	m_updateSecond = updateSecond;
+	m_checkParse = checkParse;
+
+	if (m_checkParse)
+		classTimer->start(m_updateSecond.toInt()); // Каждые три секунды
+	else
+		classTimer->stop();
+}
+
+
+void uniqueParseObject::classTimerIsDone()
+{
+
+	qDebug() << m_name + " is Done!";
 }

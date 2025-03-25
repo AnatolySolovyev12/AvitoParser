@@ -20,6 +20,11 @@ AvitoParser::AvitoParser(QWidget* parent)
 	QMainWindow::setStatusBar(sBar);
 
 	startingImportXml();
+
+	initializationPoolFunc();
+
+
+
 }
 
 AvitoParser::~AvitoParser()
@@ -369,4 +374,25 @@ void AvitoParser::mousePressEvent(QMouseEvent* event) {
 		ui.treeWidget->setCurrentItem(ui.treeWidget->invisibleRootItem());
 	}
 }
+
+
+
+
+
+
+void AvitoParser::initializationPoolFunc()
+{
+	int countOfTopItems = ui.treeWidget->topLevelItemCount();
+
+	for (int count = 0; count < countOfTopItems; count++)
+	{
+		poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
+
+		poolParse[count]->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
+
+
+	}
+
+}
+
 
