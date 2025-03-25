@@ -155,7 +155,7 @@ void AvitoParser::otherItemWasChecked(QTreeWidgetItem* any) // закрываем открыты
 	if (offChanger) return;
 
 	int column = ui.treeWidget->currentColumn();
-	qDebug() << "Checked " << any->text(column);/////////////////////////
+	//qDebug() << "Checked " << any->text(column);/////////////////////////
 
 	if (any == middleItem && column == middleColumn)
 		return;
@@ -238,18 +238,19 @@ void AvitoParser::exportXml()
 
 	int countOfTopItems = ui.treeWidget->topLevelItemCount();
 
+	xmlWriter.writeStartElement("Root");
+
 	if (countOfTopItems)
 	{
 		for (int val = 0; val < countOfTopItems; val++)
 		{
-
 			QTreeWidgetItem* any = ui.treeWidget->topLevelItem(val);
 
 			recursionXmlWriter(any, xmlWriter);
-
-			xmlWriter.writeEndElement(); 
 		}
 	}
+
+	xmlWriter.writeEndElement();
 
 	xmlWriter.writeEndDocument();
 
@@ -259,7 +260,6 @@ void AvitoParser::exportXml()
 
 void AvitoParser::recursionXmlWriter(QTreeWidgetItem* some, QXmlStreamWriter& someXmlWriter)
 {
-
 	if (some->childCount())
 	{
 		someXmlWriter.writeStartElement("Point"); // отркывает начальный элемент "лестницы" xml
@@ -384,22 +384,11 @@ void AvitoParser::loopXmlReader(QXmlStreamReader& xmlReader)
 
 	while (!xmlReader.atEnd())
 	{
-
-		if (xmlReader.readNext() == xmlReader.error())
-			qDebug() << xmlReader.error();
-
-
-		/*
 		if (xmlReader.readNextStartElement())
 		{
-			QString first = QString("'%1'")
-			.arg(xmlReader.name());
-		  
-		}
-		*/
-		
-		if (xmlReader.isStartElement())
-		{
+			if (xmlReader.name().toString() == "Root")
+				continue;
+
 			if (myList.length() == 0)
 			{
 				some = new QTreeWidgetItem(ui.treeWidget);
@@ -469,20 +458,6 @@ void AvitoParser::loopXmlReader(QXmlStreamReader& xmlReader)
 		if (xmlReader.isEndElement())
 			myList.pop_back();
 	}
-
-	if (xmlReader.readNext() == xmlReader.isStartElement())
-	{
-
-			qDebug() << "Hmmm";
-
-
-
-	}
-	else
-	{
-		qDebug() << "Error vse je";
-	}
-
 }
 
 
