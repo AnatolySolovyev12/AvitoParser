@@ -394,7 +394,5 @@ void AvitoParser::initializationPoolFunc()
 		poolParse[count]->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
 
         QObject::connect(poolParse[count].data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
-		//connect(poolParse[count].data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage(QString, tgObject->getChatId())); // выводим новые ссылки полученные при парсинге в
-
 	}
 }
