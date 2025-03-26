@@ -4,7 +4,6 @@ uniqueParseObject::uniqueParseObject(QObject *parent)
 	: QObject(parent), classTimer(new QTimer())
 {
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
-
 }
 
 uniqueParseObject::~uniqueParseObject()
@@ -121,6 +120,5 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 
 void uniqueParseObject::classTimerIsDone()
 {
-
 	qDebug() << m_name + " is Done!";
 }

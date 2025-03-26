@@ -14,6 +14,8 @@ AvitoParser::AvitoParser(QWidget* parent)
 
 	connect(ui.pushButtonExport, &QPushButton::clicked, this, &AvitoParser::exportXml);
 	connect(ui.pushButtonImport, &QPushButton::clicked, this, &AvitoParser::importXml);
+	connect(ui.pushButtonRefresh, &QPushButton::clicked, this, &AvitoParser::initializationPoolFunc);
+
 
 	middleColumn = 0;
 	sBar = new QStatusBar();
@@ -22,9 +24,6 @@ AvitoParser::AvitoParser(QWidget* parent)
 	startingImportXml();
 
 	initializationPoolFunc();
-
-
-
 }
 
 AvitoParser::~AvitoParser()
@@ -64,7 +63,10 @@ void AvitoParser::deleteItemInList()
 	QTreeWidgetItem* parent = taked->parent();
 
 	if (taked->parent() == nullptr)
+	{
 		ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(taked));
+		poolParse.removeAt(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
+	}
 	else
 		parent->takeChild(parent->indexOfChild(taked));
 }
@@ -122,7 +124,7 @@ void AvitoParser::otherItemWasChecked(QTreeWidgetItem* any) // закрываем открыты
 	if (offChanger) return;
 
 	int column = ui.treeWidget->currentColumn();
-	//qDebug() << "Checked " << any->text(column);/////////////////////////
+	//qDebug() << "Checked " << any->text(column) << ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem());/////////////////////////
 
 	if (any == middleItem && column == middleColumn)
 		return;
@@ -392,7 +394,6 @@ void AvitoParser::initializationPoolFunc()
 
 
 	}
-
 }
 
 
