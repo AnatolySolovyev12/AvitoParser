@@ -92,6 +92,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TelegramJacket.cpp" />
     <ClCompile Include="uniqueParseObject.cpp" />
     <QtRcc Include="AvitoParser.qrc" />
     <QtUic Include="AvitoParser.ui" />
@@ -101,6 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="uniqueParseObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="TelegramJacket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

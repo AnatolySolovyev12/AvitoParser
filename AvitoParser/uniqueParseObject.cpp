@@ -10,28 +10,24 @@ uniqueParseObject::~uniqueParseObject()
 {}
 
 
-
-
 void uniqueParseObject::generalParseFunc()
 {
+	if (firstAccumulateReferenceValue > 0)
+		firstAccumulateReferenceValue--;
+
 	//QList<QNetworkReply::RawHeaderPair> testListSecond;
 	//QList<QByteArray> testList;
-
-	QList<QString>referenceList;
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
 	QNetworkAccessManager nam;
 	nam.setAutoDeleteReplies(true);
 
-	//QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?cd=1&q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5"; // обычный запрос
 	QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?cd=1&q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5&s=104"; // обычный с сортировкой по дате
 
 	//int page = 1;// при многостраничном поиске
 	//for (int val = 1; val <= 4; val++) // при многостраничном поиске
 		//QString temporaryUrl = urlString;// при многостраничном поиске
 		//temporaryUrl.insert((urlString.indexOf("cd=1") + 4), "&p=" + QString::number(page));// при многостраничном поиске
-
-	qDebug() << "\n" << urlString << "\n";
 
 	QEventLoop loop;
 
@@ -87,6 +83,11 @@ void uniqueParseObject::generalParseFunc()
 			if (referenceList.indexOf(temporary) == -1)
 			{
 				referenceList.push_back(temporary);
+
+				if (firstAccumulateReferenceValue == 0)
+				{
+
+				}
 			}
 		}
 	}
@@ -95,14 +96,15 @@ void uniqueParseObject::generalParseFunc()
 
 	//page++;// при многостраничном поиске
 
+	/*
 	for (auto& val : referenceList)
 	{
 		qDebug() << val;
 	}
+	*/
 
-	qDebug() << "\n" << "Count of reference: " + QString::number(referenceList.length());
+	//qDebug() << "\n" << "Count of reference: " + QString::number(referenceList.length());
 }
-
 
 void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond, bool checkParse)
 {
@@ -120,5 +122,7 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 
 void uniqueParseObject::classTimerIsDone()
 {
-	qDebug() << m_name + " is Done!";
+	generalParseFunc();
+	//qDebug() << m_name + " is Done!";
 }
+

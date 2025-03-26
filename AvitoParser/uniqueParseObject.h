@@ -37,4 +37,8 @@ private:
 	bool m_checkParse = false;
 
 	QTimer* classTimer = nullptr;
+
+	QList<QString>referenceList;
+
+	int firstAccumulateReferenceValue = 3;
 };

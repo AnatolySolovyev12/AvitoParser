@@ -15,6 +15,23 @@
 
 #include <uniqueParseObject.h>
 
+
+
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+//#include <QApplication>
+#include <QUrl>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+//#include <QDebug>
+#include <QTimer>
+#include <QUrlQuery>
+
+
+
+
 class AvitoParser : public QMainWindow
 {
     Q_OBJECT
@@ -40,6 +57,10 @@ public:
 
 
 
+    void getUpdates();
+
+
+
 
 private slots:
     void setData();
@@ -62,5 +83,9 @@ private:
     bool sortBool = true;
 
     QList<QSharedPointer<uniqueParseObject>>poolParse;
+
+    QTimer * timer = nullptr;
+    QString token = "7509080167:AAHqPUjTtZPJ2GvvJT49jfvCwRk9IB-JnWo"; // SolovevAA617AvitoParser
+    qint64 iD;
 
 };
