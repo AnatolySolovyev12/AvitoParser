@@ -14,20 +14,10 @@
 #include <QMouseEvent>
 
 #include <uniqueParseObject.h>
+#include "TelegramJacket.h"
 
 
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
-//#include <QApplication>
-#include <QUrl>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-//#include <QDebug>
-#include <QTimer>
-#include <QUrlQuery>
 
 
 
@@ -57,7 +47,7 @@ public:
 
 
 
-    void getUpdates();
+
 
 
 
@@ -85,7 +75,7 @@ private:
     QList<QSharedPointer<uniqueParseObject>>poolParse;
 
     QTimer * timer = nullptr;
-    QString token = "7509080167:AAHqPUjTtZPJ2GvvJT49jfvCwRk9IB-JnWo"; // SolovevAA617AvitoParser
-    qint64 iD;
+
+    TelegramJacket* tgObject = nullptr;
 
 };

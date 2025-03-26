@@ -268,28 +268,3 @@ int main(int argc, char* argv[])
 
 
 */
-
-/*
-
-
-
-
-
-int main(int argc, char* argv[]) {
-	QApplication a(argc, argv);
-
-	//QString token = "7880555988:AAHhHkQUARdmJXUT8RB7mrXIgVTQIAkN3RM"; // AscueNV
-	QString token = "7509080167:AAHqPUjTtZPJ2GvvJT49jfvCwRk9IB-JnWo"; // SolovevAA617AvitoParser
-
-	QTimer timer;
-	QObject::connect(&timer, &QTimer::timeout, [=]() {
-		getUpdates(token);
-		});
-	timer.start(5000); // Проверяем каждые 5 секунд
-
-	a.exec();
-
-	return 0;
-}
-
-*/

@@ -1,7 +1,7 @@
 #include "AvitoParser.h"
 
 AvitoParser::AvitoParser(QWidget* parent)
-	: QMainWindow(parent), timer(new QTimer())
+	: QMainWindow(parent), timer(new QTimer()), tgObject(new TelegramJacket)
 {
 	ui.setupUi(this);
 
@@ -25,7 +25,8 @@ AvitoParser::AvitoParser(QWidget* parent)
 
 	initializationPoolFunc();
 
-	connect(timer, &QTimer::timeout, this, &AvitoParser::getUpdates);
+
+	connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
 
 	timer->start(5000); // ѕровер€ем каждые 5 секунд
 
@@ -391,65 +392,9 @@ void AvitoParser::initializationPoolFunc()
 		poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
 
 		poolParse[count]->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
+
+        QObject::connect(poolParse[count].data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
+		//connect(poolParse[count].data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage(QString, tgObject->getChatId())); // выводим новые ссылки полученные при парсинге в
+
 	}
-}
-
-
-void AvitoParser::getUpdates()
-{
-	QNetworkAccessManager* manager = new QNetworkAccessManager();
-
-	// добавлен таймаут дл€ LongPoll (при 0 ShortPoll) в секундах. “акже добавлен offset дл€ подтверждени€ получени€ сообщдени€ в Telegram (чтобы повторно не поулчать старые сообщени€)
-	QString urlString = QString("https://api.telegram.org/bot%1/getUpdates?offset=%2?timeout=5")
-		.arg(token)
-		.arg(iD);
-
-	//QUrl url(urlString);
-	//QNetworkRequest request(url);
-
-
-	QNetworkRequest request(urlString);
-	QNetworkReply* reply = manager->get(request);
-
-	QObject::connect(reply, &QNetworkReply::finished, [reply, this]() {
-		if (reply->error() == QNetworkReply::NoError)
-		{
-			//qDebug() << reply->readAll();
-			//QByteArray responseData = reply->readAll();
-			//QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
-			QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
-
-			if (jsonDoc["ok"].toBool())
-			{
-				QJsonArray updates = jsonDoc["result"].toArray();
-
-				for (const QJsonValue& value : updates)
-				{
-					//QJsonObject updateObj = value.toObject();
-
-					//if (updateObj.contains("message")) 
-					//{
-					QJsonObject messageObj = value["message"].toObject();
-					QJsonObject fromObj = messageObj["from"].toObject();
-
-					QString text = messageObj["text"].toString();
-
-					qDebug() << "Received message (" << value["update_id"].toInteger() << "): " << messageObj["text"].toString() << "chatId: " << fromObj["id"].toInteger();
-
-					iD = value["update_id"].toInteger() + 1;
-
-					//qDebug() << "test:" << value["update_id"].toInteger();
-
-					//}
-				}
-			}
-		}
-		else
-		{
-			qDebug() << "Error:" << reply->error() << reply->errorString();
-		}
-
-		reply->deleteLater();
-
-		});
 }

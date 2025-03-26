@@ -9,7 +9,6 @@ uniqueParseObject::uniqueParseObject(QObject *parent)
 uniqueParseObject::~uniqueParseObject()
 {}
 
-
 void uniqueParseObject::generalParseFunc()
 {
 	if (firstAccumulateReferenceValue > 0)
@@ -86,7 +85,7 @@ void uniqueParseObject::generalParseFunc()
 
 				if (firstAccumulateReferenceValue == 0)
 				{
-
+					emit messageReceived(temporary);
 				}
 			}
 		}
@@ -103,7 +102,7 @@ void uniqueParseObject::generalParseFunc()
 	}
 	*/
 
-	//qDebug() << "\n" << "Count of reference: " + QString::number(referenceList.length());
+	qDebug() << "\n" << "Count of reference: " + QString::number(referenceList.length());
 }
 
 void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond, bool checkParse)

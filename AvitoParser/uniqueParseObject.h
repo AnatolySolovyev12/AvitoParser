@@ -21,13 +21,12 @@ public:
 	void setParam(QString name, QString URL, QString updateSecond, bool checkParse);
 	void generalParseFunc();
 
-
-
+signals:
+	void messageReceived(const QString&);
 
 private:
 	void classTimerIsDone();
 	
-
 private:
 
 
@@ -40,5 +39,5 @@ private:
 
 	QList<QString>referenceList;
 
-	int firstAccumulateReferenceValue = 3;
+	int firstAccumulateReferenceValue = 6;
 };
