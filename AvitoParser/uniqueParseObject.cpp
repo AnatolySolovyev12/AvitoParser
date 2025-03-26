@@ -83,8 +83,9 @@ void uniqueParseObject::generalParseFunc()
 			{
 				referenceList.push_back(temporary);
 
-				if (firstAccumulateReferenceValue == 0)
+				if (firstAccumulateReferenceValue == 0 && (LastTemporaryMessege != temporary))
 				{
+					LastTemporaryMessege = temporary;
 					emit messageReceived(temporary);
 				}
 			}
