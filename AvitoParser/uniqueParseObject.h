@@ -40,4 +40,6 @@ private:
 	QList<QString>referenceList;
 
 	int firstAccumulateReferenceValue = 6;
+
+	QString LastTemporaryMessege;
 };
