@@ -13,6 +13,15 @@
 
 #include <QMouseEvent>
 
+#include <uniqueParseObject.h>
+#include "TelegramJacket.h"
+
+
+
+
+
+
+
 class AvitoParser : public QMainWindow
 {
     Q_OBJECT
@@ -34,6 +43,15 @@ public:
 
     void mousePressEvent(QMouseEvent* event);
 
+    void initializationPoolFunc();
+
+
+
+
+
+
+
+
 private slots:
     void setData();
     void closeEditor(QTreeWidgetItem* any);
@@ -53,4 +71,11 @@ private:
     QStatusBar* sBar;
 
     bool sortBool = true;
+
+    QList<QSharedPointer<uniqueParseObject>>poolParse;
+
+    QTimer * timer = nullptr;
+
+    TelegramJacket* tgObject = nullptr;
+
 };

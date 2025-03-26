@@ -43,9 +43,15 @@
     <ClCompile Include="uniqueParseObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TelegramJacket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="uniqueParseObject.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TelegramJacket.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "AvitoParser.h"
 
 AvitoParser::AvitoParser(QWidget* parent)
-	: QMainWindow(parent)
+	: QMainWindow(parent), timer(new QTimer()), tgObject(new TelegramJacket)
 {
 	ui.setupUi(this);
 
@@ -14,12 +14,22 @@ AvitoParser::AvitoParser(QWidget* parent)
 
 	connect(ui.pushButtonExport, &QPushButton::clicked, this, &AvitoParser::exportXml);
 	connect(ui.pushButtonImport, &QPushButton::clicked, this, &AvitoParser::importXml);
+	connect(ui.pushButtonRefresh, &QPushButton::clicked, this, &AvitoParser::initializationPoolFunc);
+
 
 	middleColumn = 0;
 	sBar = new QStatusBar();
 	QMainWindow::setStatusBar(sBar);
 
 	startingImportXml();
+
+	initializationPoolFunc();
+
+
+	connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
+
+	timer->start(5000); // Проверяем каждые 5 секунд
+
 }
 
 AvitoParser::~AvitoParser()
@@ -59,7 +69,10 @@ void AvitoParser::deleteItemInList()
 	QTreeWidgetItem* parent = taked->parent();
 
 	if (taked->parent() == nullptr)
+	{
 		ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(taked));
+		poolParse.removeAt(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
+	}
 	else
 		parent->takeChild(parent->indexOfChild(taked));
 }
@@ -117,7 +130,7 @@ void AvitoParser::otherItemWasChecked(QTreeWidgetItem* any) // закрываем открыты
 	if (offChanger) return;
 
 	int column = ui.treeWidget->currentColumn();
-	//qDebug() << "Checked " << any->text(column);/////////////////////////
+	//qDebug() << "Checked " << any->text(column) << ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem());/////////////////////////
 
 	if (any == middleItem && column == middleColumn)
 		return;
@@ -370,3 +383,18 @@ void AvitoParser::mousePressEvent(QMouseEvent* event) {
 	}
 }
 
+void AvitoParser::initializationPoolFunc()
+{
+	int countOfTopItems = ui.treeWidget->topLevelItemCount();
+
+	for (int count = 0; count < countOfTopItems; count++)
+	{
+		poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
+
+		poolParse[count]->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
+
+        QObject::connect(poolParse[count].data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
+		//connect(poolParse[count].data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage(QString, tgObject->getChatId())); // выводим новые ссылки полученные при парсинге в
+
+	}
+}

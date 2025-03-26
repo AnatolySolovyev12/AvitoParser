@@ -1,3 +1,4 @@
+п»ї
 #include "AvitoParser.h"
 
 #include <QtWidgets/QApplication>
@@ -8,8 +9,15 @@
 #include <QNetworkProxyFactory>
 #include <QFile>
 
+
+#include <windows.h>
+
+
+
 int main(int argc, char* argv[])
 {
+	SetConsoleOutputCP(1251);  // РЈСЃС‚Р°РЅРѕРІРёС‚СЊ UTF-8
+
 	QApplication a(argc, argv);
 
 	AvitoParser w;
@@ -55,15 +63,15 @@ int main(int argc, char* argv[])
 
 	loop.exec();
 
-	//в данный момент не требуется
-	testList = reply->rawHeaderList(); // список заголовков
-	testListSecond = reply->rawHeaderPairs(); // список пар необработанных заголовков
+	//РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ
+	testList = reply->rawHeaderList(); // СЃРїРёСЃРѕРє Р·Р°РіРѕР»РѕРІРєРѕРІ
+	testListSecond = reply->rawHeaderPairs(); // СЃРїРёСЃРѕРє РїР°СЂ РЅРµРѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹С… Р·Р°РіРѕР»РѕРІРєРѕРІ
 
 
 
 	QFile file("BUFFER.txt");
 
-	if (!(file.open(QIODevice::WriteOnly | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
+	if (!(file.open(QIODevice::WriteOnly | QIODevice::Truncate))) // Truncate - РґР»СЏ РѕС‡РёСЃС‚РєРё СЃРѕРґРµСЂР¶РёРјРѕРіРѕ С„Р°Р№Р»Р°
 	{
 		qDebug() << file.error();
 	}
@@ -140,12 +148,12 @@ void sendMessage(const QString& token, const QString& chatId, const QString& mes
 
 	QNetworkAccessManager* manager = new QNetworkAccessManager();
 
-	// Формирование URL запроса
+	// Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ URL Р·Р°РїСЂРѕСЃР°
 	QString urlString = QString("https://api.telegram.org/bot%1/sendMessage").arg(token);
 
 	QUrl url(urlString);
 
-	// Настройка параметров сообщения
+	// РќР°СЃС‚СЂРѕР№РєР° РїР°СЂР°РјРµС‚СЂРѕРІ СЃРѕРѕР±С‰РµРЅРёСЏ
 	QUrlQuery query;
 	query.addQueryItem("chat_id", chatId);
 	query.addQueryItem("text", message);
@@ -153,15 +161,15 @@ void sendMessage(const QString& token, const QString& chatId, const QString& mes
 	//qDebug() << query.toString() << "\n";
 
 
-	// Создание запроса
+	// РЎРѕР·РґР°РЅРёРµ Р·Р°РїСЂРѕСЃР°
 	QNetworkRequest request(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-	// Отправка запроса
+	// РћС‚РїСЂР°РІРєР° Р·Р°РїСЂРѕСЃР°
 	manager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
 
 
-	// Обработчик ответа (если необходимо)
+	// РћР±СЂР°Р±РѕС‚С‡РёРє РѕС‚РІРµС‚Р° (РµСЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ)
 	QObject::connect(manager, &QNetworkAccessManager::finished, [](QNetworkReply* reply) {
 
 		if (reply->error() == QNetworkReply::NoError)
@@ -185,11 +193,11 @@ void getUpdates(const QString& token)
 {
 	QNetworkAccessManager* manager = new QNetworkAccessManager();
 
-	// Формирование URL для получения обновлений
+	// Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ URL РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РѕР±РЅРѕРІР»РµРЅРёР№
 	QString urlString = QString("https://api.telegram.org/bot%1/getUpdates").arg(token);
 	QUrl url(urlString);
 
-	// Создание запроса
+	// РЎРѕР·РґР°РЅРёРµ Р·Р°РїСЂРѕСЃР°
 	QNetworkRequest request(url);
 
 
@@ -200,12 +208,12 @@ void getUpdates(const QString& token)
 	QNetworkReply* reply = manager->get(request);
 
 	//loop.exec();
-	// Отправка GET запроса
+	// РћС‚РїСЂР°РІРєР° GET Р·Р°РїСЂРѕСЃР°
 
 
 	QFile file("BUFFER.txt");
 
-	if (!(file.open(QIODevice::ReadOnly | QIODevice::Append))) // Truncate - для очистки содержимого файла
+	if (!(file.open(QIODevice::ReadOnly | QIODevice::Append))) // Truncate - РґР»СЏ РѕС‡РёСЃС‚РєРё СЃРѕРґРµСЂР¶РёРјРѕРіРѕ С„Р°Р№Р»Р°
 	{
 		qDebug() << file.error();
 	}
@@ -216,7 +224,7 @@ void getUpdates(const QString& token)
 
 	file.close();
 
-	// Обработчик ответа
+	// РћР±СЂР°Р±РѕС‚С‡РёРє РѕС‚РІРµС‚Р°
 	QObject::connect(reply, &QNetworkReply::finished, [reply]() {
 		if (reply->error() == QNetworkReply::NoError) {
 			QString response = reply->readAll();
@@ -237,7 +245,7 @@ int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
 
-	QString token = "7880555988:AAHhHkQUARdmJXUT8RB7mrXIgVTQIAkN3RM";
+	QString token = "7509080167:AAHqPUjTtZPJ2GvvJT49jfvCwRk9IB-JnWo";
 	QString chatId = "1443295378";
 	QString message = "HELLOW";
 	//sendMessage(token, chatId, message);
@@ -249,7 +257,7 @@ int main(int argc, char* argv[])
 	QObject::connect(&timer, &QTimer::timeout, [=]() {
 		getUpdates(token);
 		});
-	timer.start(5000); // Проверяем каждые 5 секунд
+	timer.start(5000); // РџСЂРѕРІРµСЂСЏРµРј РєР°Р¶РґС‹Рµ 5 СЃРµРєСѓРЅРґ
 
 
 	a.exec();
@@ -257,109 +265,6 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-*/
 
-
-
-/*
-
-#include <QApplication>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
-#include <QUrl>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QDebug>
-#include <QTimer>
-#include <QUrlQuery>
-
-qint64 iD;
-
-void getUpdates(const QString& token)
-{
-	QNetworkAccessManager* manager = new QNetworkAccessManager();
-
-	// добавлен таймаут для LongPoll (при 0 ShortPoll) в секундах. Также добавлен offset для подтверждения получения сообщдения в Telegram (чтобы повторно не поулчать старые сообщения)
-	QString urlString = QString("https://api.telegram.org/bot%1/getUpdates?offset=%2?timeout=5")
-		.arg(token)
-		.arg(iD);
-
-	//QUrl url(urlString);
-	//QNetworkRequest request(url);
-
-
-	QNetworkRequest request(urlString);
-	QNetworkReply* reply = manager->get(request);
-
-	QObject::connect(reply, &QNetworkReply::finished, [reply]() {
-		if (reply->error() == QNetworkReply::NoError)
-		{
-			//qDebug() << reply->readAll();
-			//QByteArray responseData = reply->readAll();
-			//QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
-			QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
-
-
-			if (jsonDoc["ok"].toBool())
-			{
-				QJsonArray updates = jsonDoc["result"].toArray();
-
-
-
-
-				for (const QJsonValue& value : updates)
-				{
-					//QJsonObject updateObj = value.toObject();
-
-					//if (updateObj.contains("message")) 
-					//{
-					QJsonObject messageObj = value["message"].toObject();
-
-					//QString text = messageObj["text"].toString();
-
-					//qDebug() << "Received message:" << text;
-					//qDebug() << "test:" << messageObj["date"].toInt();
-					//qDebug() << "test:" << messageObj["text"].toString();
-					//qDebug() << "test:" << messageObj["message_id"].toInt();
-
-					qDebug() << "Received message (" << value["update_id"].toInteger() << "): " << messageObj["text"].toString();
-
-					iD = value["update_id"].toInteger() + 1;
-
-					//qDebug() << "test:" << value["update_id"].toInteger();
-
-					//}
-				}
-			}
-			//}
-		}
-		else
-		{
-			qDebug() << "Error:" << reply->error() << reply->errorString();
-		}
-
-		reply->deleteLater();
-
-		});
-}
-
-int main(int argc, char* argv[]) {
-	QApplication a(argc, argv);
-
-	QString token = "7880555988:AAHhHkQUARdmJXUT8RB7mrXIgVTQIAkN3RM"; // Замените на ваш токен
-
-
-	QTimer timer;
-	QObject::connect(&timer, &QTimer::timeout, [=]() {
-		getUpdates(token);
-		});
-	timer.start(5000); // Проверяем каждые 5 секунд
-
-	a.exec();
-
-	return 0;
-}
 
 */
