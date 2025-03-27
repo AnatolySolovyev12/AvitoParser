@@ -56,8 +56,6 @@ void TelegramJacket::getUpdates()
 		reply->deleteLater();
 
 		});
-
-	manager->deleteLater();
 }
 
 void TelegramJacket::sendMessage(const QString message)
@@ -100,8 +98,6 @@ void TelegramJacket::sendMessage(const QString message)
 		});
 
 		*/
-
-	manager->deleteLater();
 }
 
 const QString TelegramJacket::getChatId()

@@ -100,7 +100,7 @@ void AvitoParser::closeEditor(QTreeWidgetItem* any) // слот закрытия редактора в
 
 		if (any->text(2).toInt() < 20000) // красим если что-то написано в серийнике
 		{
-			any->setText(2, "20000");
+			any->setText(2, "10000");
 		}
 
 		offChanger = false;

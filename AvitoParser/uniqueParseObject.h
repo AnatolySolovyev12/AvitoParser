@@ -18,6 +18,7 @@ public:
 
 	void setParam(QString name, QString URL, QString updateSecond, bool checkParse);
 	void generalParseFunc();
+	void fileParseFunc(const QByteArray& data);
 
 signals:
 	void messageReceived(const QString&);
@@ -36,10 +37,8 @@ private:
 
 	QList<QString>referenceList;
 
-	int firstAccumulateReferenceValue = 6;
+	int firstAccumulateReferenceValue = 5;
 	int countOfReference = 0;
-
-	QString LastTemporaryMessege;
 
 	QString subUrlString;
 };

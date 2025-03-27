@@ -53,54 +53,7 @@ void uniqueParseObject::generalParseFunc()
 		}
 
 
-
-		QFile file("BUFFER_" + m_name + ".txt"); // при многостраничном поиске создание нескольких файлов
-
-		if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
-			//if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - для добавления содержимого в файла
-		{
-			qDebug() << "Error (uniqueParseObject::generalParseFunc()): " << file.error();
-		}
-
-		QTextStream in(&file);
-
-		in << reply->readAll() << Qt::endl;
-
-		in.seek(0);
-
-		while (!in.atEnd())
-		{
-			QString line = in.readLine();
-
-			if (line.indexOf(subUrlString) != -1)
-			{
-				int index = line.indexOf(subUrlString);
-
-				QString temporary;
-
-				for (QString val : line.sliced(index))
-				{
-					if (val == ')' || val == ' ' || val == '?' || val == '&' || val == '"')
-					{
-						break;
-					}
-					temporary += val;
-				}
-
-				temporary.push_front("https://www.avito.ru");
-
-				if (referenceList.indexOf(temporary) == -1)
-				{
-					referenceList.push_back(temporary);
-
-					if ((firstAccumulateReferenceValue == 0) && (LastTemporaryMessege != temporary))
-					{
-						LastTemporaryMessege = temporary;
-						emit messageReceived(temporary);
-					}
-				}
-			}
-		}
+		fileParseFunc(reply->readAll());
 
 		//page++;// при многостраничном поиске
 
@@ -111,16 +64,67 @@ void uniqueParseObject::generalParseFunc()
 			countOfReference = int(referenceList.length());
 		}
 
-		file.close();
-
-		nam.disconnect();
-
 	}
 	catch (const std::exception& e) {
 		qWarning() << "Error in generalParseFunc:" << e.what();
 	}
 
 }
+
+
+void uniqueParseObject::fileParseFunc(const QByteArray& data)
+{
+	QFile file("BUFFER_" + m_name + ".txt"); // при многостраничном поиске создание нескольких файлов
+
+	if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
+		//if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - для добавления содержимого в файла
+	{
+		qDebug() << "Error (uniqueParseObject::generalParseFunc()): " << file.error();
+	}
+
+	QTextStream in(&file);
+
+	in << data << Qt::endl;
+
+	in.seek(0);
+
+	while (!in.atEnd())
+	{
+		QString line = in.readLine();
+
+		if (line.indexOf(subUrlString) != -1)
+		{
+			int index = line.indexOf(subUrlString);
+
+			QString temporary;
+
+			for (QString val : line.sliced(index))
+			{
+				if (val == ')' || val == ' ' || val == '?' || val == '&' || val == '"')
+				{
+					break;
+				}
+				temporary += val;
+			}
+
+			temporary.push_front("https://www.avito.ru");
+
+			if (referenceList.indexOf(temporary) == -1)
+			{
+				referenceList.push_back(temporary);
+
+				if (firstAccumulateReferenceValue == 0)
+				{
+					emit messageReceived(referenceList.last());
+				}
+			}
+		}
+	}
+
+	file.close();
+}
+
+
 
 void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond, bool checkParse)
 {
@@ -145,7 +149,6 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 	for (auto& val : temporary)
 	{
 		if (val == '/' || val == '?') count++;
-
 
 		if (count == 3 && (val == '?' || val == '/'))
 		{
