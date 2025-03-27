@@ -1,29 +1,33 @@
 #include "AvitoParser.h"
 
 AvitoParser::AvitoParser(QWidget* parent)
-	: QMainWindow(parent), timer(new QTimer()), tgObject(new TelegramJacket)
+	: QMainWindow(parent), timer(new QTimer()), tgObject(new TelegramJacket), sBar(new QStatusBar())
 {
 	ui.setupUi(this);
 
 	connect(ui.pushButtonAdd, &QPushButton::clicked, this, &AvitoParser::addItemInList);
 	connect(ui.pushButtonAddMinus, &QPushButton::clicked, this, &AvitoParser::deleteItemInList);
 
-	connect(ui.treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(setData()));
-	connect(ui.treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(closeEditor(QTreeWidgetItem*)));
-	connect(ui.treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(otherItemWasChecked(QTreeWidgetItem*)));
+	//connect(ui.treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(setData()));
+	//connect(ui.treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(closeEditor(QTreeWidgetItem*)));
+	//connect(ui.treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(otherItemWasChecked(QTreeWidgetItem*)));
+
+	connect(ui.treeWidget, &QTreeWidget::itemDoubleClicked, this, &AvitoParser::setData);
+	connect(ui.treeWidget, &QTreeWidget::itemChanged, this, &AvitoParser::closeEditor);
+	connect(ui.treeWidget, &QTreeWidget::itemClicked, this, &AvitoParser::otherItemWasChecked);
+
 
 	connect(ui.pushButtonExport, &QPushButton::clicked, this, &AvitoParser::exportXml);
 	connect(ui.pushButtonImport, &QPushButton::clicked, this, &AvitoParser::importXml);
 	connect(ui.pushButtonRefresh, &QPushButton::clicked, this, &AvitoParser::initializationPoolFunc);
 
-	sBar = new QStatusBar();
 	QMainWindow::setStatusBar(sBar);
 
 	startingImportXml();
 	initializationPoolFunc();
 
 	connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
-	timer->start(5000); // Проверяем каждые 5 секунд
+	timer->start(12000); // Проверяем каждые 5 секунд
 }
 
 
@@ -36,7 +40,10 @@ void AvitoParser::addItemInList()
 	QTreeWidgetItem* any = nullptr;
 
 	if (ui.treeWidget->currentItem() == nullptr)
-		any = new QTreeWidgetItem(ui.treeWidget);
+	{
+		any = new QTreeWidgetItem();
+		ui.treeWidget->addTopLevelItem(any);
+	}
 	else
 		return;
 
@@ -52,9 +59,12 @@ void AvitoParser::addItemInList()
 
 	offChanger = false;
 
-	poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
+	poolParse.push_back(QSharedPointer<uniqueParseObject>::create());
+	//poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
 	poolParse.last()->setParam(ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(0), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(1), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(2), ui.treeWidget->topLevelItem(poolParse.length() - 1)->checkState(3));
 	QObject::connect(poolParse.last().data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
+
+	any = nullptr;
 }
 
 
@@ -388,10 +398,16 @@ void AvitoParser::initializationPoolFunc()
 
 	for (int count = 0; count < countOfTopItems; count++)
 	{
-		poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
+		//poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
+		//QObject::connect(poolParse[count].data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
 
-		poolParse[count].data()->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
+		auto newParser = QSharedPointer<uniqueParseObject>::create();
 
-        QObject::connect(poolParse[count].data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
+		connect(newParser.data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage);
+
+		newParser->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
+
+		poolParse.append(newParser);
+
 	}
 }

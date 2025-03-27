@@ -11,12 +11,12 @@
 #include <QTimer>
 #include <QUrlQuery>
 
-class TelegramJacket  : public QObject
+class TelegramJacket : public QObject
 {
 	Q_OBJECT
 
 public:
-	TelegramJacket(QObject *parent = nullptr);
+	TelegramJacket(QObject* parent = nullptr);
 	~TelegramJacket();
 
 	void getUpdates();
@@ -32,5 +32,8 @@ public:
 	QString token = "7509080167:AAHqPUjTtZPJ2GvvJT49jfvCwRk9IB-JnWo"; // SolovevAA617AvitoParser
 	qint64 iD;
 	const QString chatId = "1443295378";
+
+private:
+	QNetworkAccessManager* manager = nullptr;
 
 };

@@ -29,7 +29,6 @@ public:
     void mousePressEvent(QMouseEvent* event);
     void initializationPoolFunc();
 
-private slots:
     void setData();
     void closeEditor(QTreeWidgetItem* any);
     void otherItemWasChecked(QTreeWidgetItem* any);

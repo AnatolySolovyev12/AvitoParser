@@ -66,7 +66,7 @@ void uniqueParseObject::generalParseFunc()
 
 	}
 	catch (const std::exception& e) {
-		qWarning() << "Error in generalParseFunc:" << e.what();
+		qWarning() << "Error in uniqueParseObject::generalParseFunc:" << e.what();
 	}
 
 }
@@ -79,7 +79,7 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 	if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
 		//if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - для добавления содержимого в файла
 	{
-		qDebug() << "Error (uniqueParseObject::generalParseFunc()): " << file.error();
+		qWarning() << "Error in uniqueParseObject::fileParseFunc:" << file.error();
 	}
 
 	QTextStream in(&file);
