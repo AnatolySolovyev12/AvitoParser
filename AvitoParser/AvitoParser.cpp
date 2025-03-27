@@ -25,7 +25,6 @@ AvitoParser::AvitoParser(QWidget* parent)
 	
 	initializationPoolFunc();
 
-
 	connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
 
 	timer->start(5000); // Проверяем каждые 5 секунд
@@ -57,6 +56,10 @@ void AvitoParser::addItemInList()
 	any->setBackground(2, QColor(217, 225, 187, 255));
 
 	offChanger = false;
+
+	poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
+	poolParse.last()->setParam(ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(0), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(1), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(2), ui.treeWidget->topLevelItem(poolParse.length() - 1)->checkState(3));
+	QObject::connect(poolParse.last().data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
 }
 
 
@@ -64,12 +67,11 @@ void AvitoParser::deleteItemInList()
 {
 	if (ui.treeWidget->currentItem() == nullptr) return;
 
-	qDebug() << "1";
+	//if (ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()) > poolParse.length()) return;
+		
 	poolParse.removeAt(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
-	qDebug() << "2";
-
 	ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
-	qDebug() << "3";
+
 
 	//QTreeWidgetItem* taked = ui.treeWidget->currentItem();
 
@@ -138,7 +140,7 @@ void AvitoParser::otherItemWasChecked(QTreeWidgetItem* any) // закрываем открыты
 	if (offChanger) return;
 
 	int column = ui.treeWidget->currentColumn();
-	//qDebug() << "Checked " << any->text(column) << ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem());/////////////////////////
+	qDebug() << "Checked " << any->text(column) << ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()) << "Size PoolParse " << poolParse.length();/////////////////////////
 
 	if (any == middleItem && column == middleColumn)
 		return;
@@ -394,6 +396,8 @@ void AvitoParser::mousePressEvent(QMouseEvent* event) {
 void AvitoParser::initializationPoolFunc()
 {
 	int countOfTopItems = ui.treeWidget->topLevelItemCount();
+
+	poolParse.clear();
 
 	for (int count = 0; count < countOfTopItems; count++)
 	{
