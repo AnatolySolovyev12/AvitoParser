@@ -57,8 +57,8 @@ void uniqueParseObject::generalParseFunc()
 
 		//page++;// при многостраничном поиске
 
-		if (true)
-		//if (countOfReference < referenceList.length())
+		//if (true)
+		if (countOfReference < referenceList.length())
 		{
 			qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length());
 			countOfReference = int(referenceList.length());
