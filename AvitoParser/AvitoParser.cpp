@@ -258,6 +258,9 @@ void AvitoParser::importXml()
 		txtFile.remove();
 
 	txtFile.close();
+
+	initializationPoolFunc();
+
 }
 
 
@@ -382,7 +385,7 @@ void AvitoParser::initializationPoolFunc()
 	{
 		poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
 
-		poolParse[count]->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
+		poolParse[count].data()->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
 
         QObject::connect(poolParse[count].data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
 	}

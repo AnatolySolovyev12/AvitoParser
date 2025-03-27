@@ -4,25 +4,6 @@ uniqueParseObject::uniqueParseObject(QObject *parent)
 	: QObject(parent), classTimer(new QTimer())
 {
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
-
-
-	QString temporary = m_URL; // обычный с сортировкой по дате
-
-	temporary = temporary.remove("https://www.avito.ru");
-
-	int count = 0;
-
-	for (auto& val : temporary)
-	{
-		if (val == '/') count++;
-
-		subUrlString += val;
-
-		if (count == 3)
-		{
-			break;
-		}
-	}
 }
 
 uniqueParseObject::~uniqueParseObject()
@@ -138,6 +119,32 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 		classTimer->start(m_updateSecond.toInt()); // Каждые три секунды
 	else
 		classTimer->stop();
+
+	QString temporary = m_URL; // обычный с сортировкой по дате
+
+	qDebug() << m_URL;
+
+	temporary = temporary.remove("https://www.avito.ru");
+
+	int count = 0;
+
+
+	for (auto& val : temporary)
+	{
+		if (val == '/' || val == '?') count++;
+
+
+		if (count == 3 && val == '?')
+		{
+			subUrlString += '/';
+			break;
+		}
+
+		subUrlString += val;
+
+	}
+
+	qDebug() << subUrlString;
 }
 
 
