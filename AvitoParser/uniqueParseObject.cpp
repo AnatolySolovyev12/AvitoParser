@@ -134,7 +134,7 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 		if (val == '/' || val == '?') count++;
 
 
-		if (count == 3 && val == '?')
+		if (count == 3 && (val == '?' || val == '/'))
 		{
 			subUrlString += '/';
 			break;
