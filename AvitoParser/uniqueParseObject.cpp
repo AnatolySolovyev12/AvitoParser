@@ -6,42 +6,85 @@ uniqueParseObject::uniqueParseObject(QObject *parent)
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
 }
 
-uniqueParseObject::~uniqueParseObject()
-{}
-
 void uniqueParseObject::generalParseFunc()
 {
-	if (firstAccumulateReferenceValue > 0)
-		firstAccumulateReferenceValue--;
+	try{
 
-	QNetworkProxyFactory::setUseSystemConfiguration(true);
-	QNetworkAccessManager nam;
-	nam.setAutoDeleteReplies(true);
+		if (!QUrl(m_URL).isValid()) // проверка соответствия адреса на корректность
+		{
+			qWarning() << "Invalid URL:" << m_URL;
+			return;
+		}
 
-	//int page = 1;// при многостраничном поиске
-	//for (int val = 1; val <= 4; val++) // при многостраничном поиске
-		//QString temporaryUrl = urlString;// при многостраничном поиске
-		//temporaryUrl.insert((urlString.indexOf("cd=1") + 4), "&p=" + QString::number(page));// при многостраничном поиске
+		if (firstAccumulateReferenceValue > 0)
+			--firstAccumulateReferenceValue;
 
-	QEventLoop loop;
+		QNetworkProxyFactory::setUseSystemConfiguration(true);
+		QNetworkAccessManager nam;
+		nam.setAutoDeleteReplies(true);
 
-	QObject::connect(&nam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
+		//int page = 1;// при многостраничном поиске
+		//for (int val = 1; val <= 4; val++) // при многостраничном поиске
+			//QString temporaryUrl = urlString;// при многостраничном поиске
+			//temporaryUrl.insert((urlString.indexOf("cd=1") + 4), "&p=" + QString::number(page));// при многостраничном поиске
 
-	QSharedPointer<QNetworkReply>reply(nam.get(QNetworkRequest(QUrl(m_URL))));
+		QEventLoop loop;
 
-	loop.exec();
+		QObject::connect(&nam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
 
-    QFile file("BUFFER" + m_name + ".txt"); // при многостраничном поиске создание нескольких файлов
+		QSharedPointer<QNetworkReply>reply(nam.get(QNetworkRequest(QUrl(m_URL))));
+
+
+
+		if (!reply) {
+			throw std::runtime_error("Failed to create network request");
+		}
+
+
+
+		QTimer::singleShot(20000, &loop, &QEventLoop::quit);
+
+		loop.exec();
+
+
+
+		if (reply->error() != QNetworkReply::NoError) {
+			throw std::runtime_error(reply->errorString().toStdString());
+		}
+
+
+		fileParseFunc(reply->readAll());
+
+		//page++;// при многостраничном поиске
+
+		if (true)
+		//if (countOfReference < referenceList.length())
+		{
+			qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length());
+			countOfReference = int(referenceList.length());
+		}
+
+	}
+	catch (const std::exception& e) {
+		qWarning() << "Error in uniqueParseObject::generalParseFunc:" << e.what();
+	}
+
+}
+
+
+void uniqueParseObject::fileParseFunc(const QByteArray& data)
+{
+	QFile file("BUFFER_" + m_name + ".txt"); // при многостраничном поиске создание нескольких файлов
 
 	if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
 		//if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - для добавления содержимого в файла
 	{
-		qDebug() << file.error();
+		qWarning() << "Error in uniqueParseObject::fileParseFunc:" << file.error();
 	}
 
 	QTextStream in(&file);
 
-	in << reply->readAll() << Qt::endl;
+	in << data << Qt::endl;
 
 	in.seek(0);
 
@@ -70,24 +113,18 @@ void uniqueParseObject::generalParseFunc()
 			{
 				referenceList.push_back(temporary);
 
-				if (firstAccumulateReferenceValue == 0 && (LastTemporaryMessege != temporary))
+				if (firstAccumulateReferenceValue == 0)
 				{
-					LastTemporaryMessege = temporary;
-					emit messageReceived(temporary);
+					emit messageReceived(referenceList.last());
 				}
 			}
 		}
 	}
 
 	file.close();
-
-	//page++;// при многостраничном поиске
-	if (countOfReference != referenceList.length())
-	{
-		qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length());
-		countOfReference = referenceList.length();
-	}
 }
+
+
 
 void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond, bool checkParse)
 {
@@ -103,7 +140,7 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 
 	QString temporary = m_URL; // обычный с сортировкой по дате
 
-	qDebug() << m_URL;
+	//qDebug() << m_URL;
 
 	temporary = temporary.remove("https://www.avito.ru");
 
@@ -112,7 +149,6 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 	for (auto& val : temporary)
 	{
 		if (val == '/' || val == '?') count++;
-
 
 		if (count == 3 && (val == '?' || val == '/'))
 		{
@@ -123,7 +159,7 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 		subUrlString += val;
 	}
 
-	qDebug() << subUrlString << "\n";
+	qDebug() << m_URL << subUrlString << "\n";
 }
 
 

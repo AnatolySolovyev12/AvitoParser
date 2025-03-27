@@ -1,7 +1,7 @@
 #include "TelegramJacket.h"
 
 TelegramJacket::TelegramJacket(QObject *parent)
-	: QObject(parent)
+	: QObject(parent), manager(new QNetworkAccessManager)
 {}
 
 
@@ -11,10 +11,9 @@ TelegramJacket::~TelegramJacket()
 
 void TelegramJacket::getUpdates()
 {
-	QNetworkAccessManager* manager = new QNetworkAccessManager();
 
 	// добавлен таймаут для LongPoll (при 0 ShortPoll) в секундах. Также добавлен offset для подтверждения получения сообщдения в Telegram (чтобы повторно не поулчать старые сообщения)
-	QString urlString = QString("https://api.telegram.org/bot%1/getUpdates?offset=%2?timeout=5")
+	QString urlString = QString("https://api.telegram.org/bot%1/getUpdates?offset=%2?timeout=12")
 		.arg(token)
 		.arg(iD);
 
@@ -32,38 +31,46 @@ void TelegramJacket::getUpdates()
 
 				for (const QJsonValue& value : updates)
 				{
+
 					QJsonObject messageObj = value["message"].toObject();
 					QJsonObject fromObj = messageObj["from"].toObject();
 
-					QString text = messageObj["text"].toString();
+					if (messageObj.contains("text") && fromObj.contains("id")) {
 
-					qDebug() << "Received message (" << value["update_id"].toInteger() << "): " << messageObj["text"].toString() << "chatId: " << fromObj["id"].toInteger();
+						QString text = messageObj["text"].toString();
 
-					iD = value["update_id"].toInteger() + 1;
+						qDebug() << "Received message (" << value["update_id"].toInteger() << "): " << messageObj["text"].toString() << "chatId: " << fromObj["id"].toInteger();
 
-					if (text == "/start")
+						iD = value["update_id"].toInteger() + 1;
+
+						if (text == "/start")
+						{
+							sendMessage(chatId);
+						}
+					}
+					else
 					{
-						sendMessage(chatId);
+						qDebug() << "Error (TelegramJacket::getUpdates(1)): " << reply->error() << reply->errorString();
 					}
 				}
 			}
 		}
 		else
 		{
-			qDebug() << "Error:" << reply->error() << reply->errorString();
+			qDebug() << "Error (TelegramJacket::getUpdates(2)): " << reply->error() << reply->errorString();
 		}
 
-		reply->deleteLater();
+		//reply->deleteLater();
 
 		});
 }
 
-
-//void TelegramJacket::sendMessage(const QString chatId, const QString message)
-
 void TelegramJacket::sendMessage(const QString message)
 {
-	QNetworkAccessManager* manager = new QNetworkAccessManager();
+	if (message.isEmpty()) {
+		qWarning() << "Attempt to send empty message";
+		return;
+	}
 
 	// Формирование URL запроса
 	QString urlString = QString("https://api.telegram.org/bot%1/sendMessage").arg(token);

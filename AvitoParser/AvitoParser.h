@@ -10,10 +10,6 @@
 #include <uniqueParseObject.h>
 #include "TelegramJacket.h"
 
-//#include <QInputDialog>
-//#include <QtSql/QtSql>
-//#include <QTableWidgetItem>
-
 class AvitoParser : public QMainWindow
 {
     Q_OBJECT
@@ -33,7 +29,6 @@ public:
     void mousePressEvent(QMouseEvent* event);
     void initializationPoolFunc();
 
-private slots:
     void setData();
     void closeEditor(QTreeWidgetItem* any);
     void otherItemWasChecked(QTreeWidgetItem* any);
@@ -46,9 +41,6 @@ private:
 
     int middleColumn = 0;
     int countRow = 1;
-
-    // QTableWidgetItem* item = nullptr;
-    // QSqlDatabase mw_db; // экземпляр подключения к БД
 
     QTreeWidgetItem* middleItem = nullptr;
     QStatusBar* sBar;
