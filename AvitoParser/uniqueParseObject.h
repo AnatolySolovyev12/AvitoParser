@@ -42,4 +42,6 @@ private:
 	int firstAccumulateReferenceValue = 6;
 
 	QString LastTemporaryMessege;
+
+	QString subUrlString;
 };

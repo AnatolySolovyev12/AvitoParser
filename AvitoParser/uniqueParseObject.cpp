@@ -4,6 +4,25 @@ uniqueParseObject::uniqueParseObject(QObject *parent)
 	: QObject(parent), classTimer(new QTimer())
 {
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
+
+
+	QString temporary = m_URL; // обычный с сортировкой по дате
+
+	temporary = temporary.remove("https://www.avito.ru");
+
+	int count = 0;
+
+	for (auto& val : temporary)
+	{
+		if (val == '/') count++;
+
+		subUrlString += val;
+
+		if (count == 3)
+		{
+			break;
+		}
+	}
 }
 
 uniqueParseObject::~uniqueParseObject()
@@ -21,7 +40,7 @@ void uniqueParseObject::generalParseFunc()
 	QNetworkAccessManager nam;
 	nam.setAutoDeleteReplies(true);
 
-	QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?cd=1&q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5&s=104"; // обычный с сортировкой по дате
+	//QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?cd=1&q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5&s=104"; // обычный с сортировкой по дате
 
 	//int page = 1;// при многостраничном поиске
 	//for (int val = 1; val <= 4; val++) // при многостраничном поиске
@@ -32,16 +51,18 @@ void uniqueParseObject::generalParseFunc()
 
 	QObject::connect(&nam, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
 
-	QSharedPointer<QNetworkReply>reply(nam.get(QNetworkRequest(QUrl(urlString))));
+	QSharedPointer<QNetworkReply>reply(nam.get(QNetworkRequest(QUrl(m_URL))));
 
 	loop.exec();
+
 
 	//в данный момент не требуется
 	//testList = reply->rawHeaderList(); // список заголовков
 	//testListSecond = reply->rawHeaderPairs(); // список пар необработанных заголовков
 
 	//QFile file("BUFFER" + QString::number(page) + ".txt"); // при многостраничном поиске создание нескольких файлов
-	QFile file("BUFFER.txt");
+	//QFile file("BUFFER.txt");
+    QFile file("BUFFER" + m_name + ".txt"); // при многостраничном поиске создание нескольких файлов
 
 	if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
 		//if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - для добавления содержимого в файла
@@ -59,10 +80,10 @@ void uniqueParseObject::generalParseFunc()
 	{
 		QString line = in.readLine();
 
-		if (line.indexOf("/nizhnevartovsk/igry_pristavki_i_programmy/") != -1)
+		if (line.indexOf(subUrlString) != -1)
 			//if (line.indexOf("/nizhnevartovsk/telefony/") != -1)
 		{
-			int index = line.indexOf("/nizhnevartovsk/igry_pristavki_i_programmy/");
+			int index = line.indexOf(subUrlString);
 			//int index = line.indexOf("/nizhnevartovsk/telefony/");
 
 			QString temporary;
@@ -103,7 +124,7 @@ void uniqueParseObject::generalParseFunc()
 	}
 	*/
 
-	qDebug() << "\n" << "Count of reference: " + QString::number(referenceList.length());
+	qDebug() << "\n" << "(" + m_name + ")" + "Count of reference: " + QString::number(referenceList.length());
 }
 
 void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond, bool checkParse)
@@ -123,6 +144,5 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 void uniqueParseObject::classTimerIsDone()
 {
 	generalParseFunc();
-	//qDebug() << m_name + " is Done!";
 }
 
