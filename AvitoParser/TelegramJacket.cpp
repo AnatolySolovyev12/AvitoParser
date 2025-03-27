@@ -50,16 +50,15 @@ void TelegramJacket::getUpdates()
 		}
 		else
 		{
-			qDebug() << "Error:" << reply->error() << reply->errorString();
+			qDebug() << "Error (TelegramJacket::getUpdates()): " << reply->error() << reply->errorString();
 		}
 
 		reply->deleteLater();
 
 		});
+
+	manager->deleteLater();
 }
-
-
-//void TelegramJacket::sendMessage(const QString chatId, const QString message)
 
 void TelegramJacket::sendMessage(const QString message)
 {
@@ -101,6 +100,8 @@ void TelegramJacket::sendMessage(const QString message)
 		});
 
 		*/
+
+	manager->deleteLater();
 }
 
 const QString TelegramJacket::getChatId()

@@ -16,9 +16,6 @@ class uniqueParseObject : public QObject
 public:
 	uniqueParseObject(QObject* parent = nullptr);
 
-	~uniqueParseObject();
-
-
 	void setParam(QString name, QString URL, QString updateSecond, bool checkParse);
 	void generalParseFunc();
 
@@ -40,7 +37,7 @@ private:
 	QList<QString>referenceList;
 
 	int firstAccumulateReferenceValue = 6;
-	int countOfReference;
+	int countOfReference = 0;
 
 	QString LastTemporaryMessege;
 

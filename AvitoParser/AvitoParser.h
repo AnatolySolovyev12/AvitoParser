@@ -43,9 +43,6 @@ private:
     int middleColumn = 0;
     int countRow = 1;
 
-    // QTableWidgetItem* item = nullptr;
-    // QSqlDatabase mw_db; // экземпляр подключения к БД
-
     QTreeWidgetItem* middleItem = nullptr;
     QStatusBar* sBar;
 
