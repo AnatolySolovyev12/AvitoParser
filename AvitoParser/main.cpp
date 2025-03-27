@@ -20,75 +20,8 @@ int main(int argc, char* argv[])
 
 	QApplication a(argc, argv);
 
-	//AvitoParser w;
-	//w.show();
-
-
-
-
-    QString urlString = "https://www.avito.ru/nizhnevartovsk/igry_pristavki_i_programmy/igry_dlya_pristavok-ASgBAgICAUSSAsYJ?cd=1&q=%D0%B8%D0%B3%D1%80%D1%8B+%D0%BD%D0%B0+playstation+5&s=104"; // обычный с сортировкой по дате
-
-	urlString = urlString.remove("https://www.avito.ru");
-
-	QString temporary;
-
-	int count = 0;
-
-	for (auto& val : urlString)
-	{
-		if (val == '/') count++;
-
-		temporary += val;
-
-		if (count == 3)
-		{
-			qDebug() << temporary;
-			break;
-		}
-	}
-
-	/*
-	if (urlString.indexOf("https://www.avito.ru") != -1)
-		//if (line.indexOf("/nizhnevartovsk/telefony/") != -1)
-	{
-		int index = line.indexOf("/nizhnevartovsk/igry_pristavki_i_programmy/");
-		//int index = line.indexOf("/nizhnevartovsk/telefony/");
-
-		QString temporary;
-
-		for (QString val : line.sliced(index))
-		{
-			if (val == ')' || val == ' ' || val == '?' || val == '&' || val == '"')
-			{
-				break;
-			}
-
-			temporary += val;
-		}
-
-
-		*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	AvitoParser w;
+    w.show();
 
 	a.exec();
 
