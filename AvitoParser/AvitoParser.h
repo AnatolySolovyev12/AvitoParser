@@ -10,10 +10,6 @@
 #include <uniqueParseObject.h>
 #include "TelegramJacket.h"
 
-//#include <QInputDialog>
-//#include <QtSql/QtSql>
-//#include <QTableWidgetItem>
-
 class AvitoParser : public QMainWindow
 {
     Q_OBJECT
