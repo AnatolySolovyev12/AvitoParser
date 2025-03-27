@@ -98,6 +98,11 @@ void AvitoParser::closeEditor(QTreeWidgetItem* any) // слот закрытия редактора в
 		any->setBackground(3, QColor(128, 243, 150, 255));
 		any->setCheckState(3, any->checkState(3));
 
+		if (any->text(2).toInt() < 20000) // красим если что-то написано в серийнике
+		{
+			any->setText(2, "20000");
+		}
+
 		offChanger = false;
 	}
 	else

@@ -7,6 +7,7 @@
 #include <QNetworkProxyFactory>
 #include <QFile>
 #include <QTimer>
+#include <QDateTime>
 
 class uniqueParseObject : public QObject
 {
@@ -29,7 +30,6 @@ private:
 	
 private:
 
-
 	QString m_name;
 	QString m_URL;
 	QString m_updateSecond;
@@ -40,6 +40,7 @@ private:
 	QList<QString>referenceList;
 
 	int firstAccumulateReferenceValue = 6;
+	int countOfReference;
 
 	QString LastTemporaryMessege;
 
