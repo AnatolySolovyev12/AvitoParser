@@ -22,7 +22,7 @@ AvitoParser::AvitoParser(QWidget* parent)
 	QMainWindow::setStatusBar(sBar);
 
 	startingImportXml();
-
+	
 	initializationPoolFunc();
 
 
@@ -64,17 +64,25 @@ void AvitoParser::deleteItemInList()
 {
 	if (ui.treeWidget->currentItem() == nullptr) return;
 
-	QTreeWidgetItem* taked = ui.treeWidget->currentItem();
+	qDebug() << "1";
+	poolParse.removeAt(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
+	qDebug() << "2";
 
-	QTreeWidgetItem* parent = taked->parent();
+	ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
+	qDebug() << "3";
 
+	//QTreeWidgetItem* taked = ui.treeWidget->currentItem();
+
+	//QTreeWidgetItem* parent = taked->parent();
+	/*
 	if (taked->parent() == nullptr)
 	{
-		ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(taked));
 		poolParse.removeAt(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
+		ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
 	}
-	else
-		parent->takeChild(parent->indexOfChild(taked));
+	//else
+	//	parent->takeChild(parent->indexOfChild(taked));
+	*/
 }
 
 
