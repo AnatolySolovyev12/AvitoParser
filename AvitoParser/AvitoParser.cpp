@@ -16,20 +16,16 @@ AvitoParser::AvitoParser(QWidget* parent)
 	connect(ui.pushButtonImport, &QPushButton::clicked, this, &AvitoParser::importXml);
 	connect(ui.pushButtonRefresh, &QPushButton::clicked, this, &AvitoParser::initializationPoolFunc);
 
-
-	middleColumn = 0;
 	sBar = new QStatusBar();
 	QMainWindow::setStatusBar(sBar);
 
 	startingImportXml();
-	
 	initializationPoolFunc();
 
 	connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
-
 	timer->start(5000); // ѕровер€ем каждые 5 секунд
-
 }
+
 
 AvitoParser::~AvitoParser()
 {}
@@ -41,7 +37,6 @@ void AvitoParser::addItemInList()
 
 	if (ui.treeWidget->currentItem() == nullptr)
 		any = new QTreeWidgetItem(ui.treeWidget);
-
 	else
 		return;
 
@@ -67,24 +62,8 @@ void AvitoParser::deleteItemInList()
 {
 	if (ui.treeWidget->currentItem() == nullptr) return;
 
-	//if (ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()) > poolParse.length()) return;
-		
 	poolParse.removeAt(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
 	ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
-
-
-	//QTreeWidgetItem* taked = ui.treeWidget->currentItem();
-
-	//QTreeWidgetItem* parent = taked->parent();
-	/*
-	if (taked->parent() == nullptr)
-	{
-		poolParse.removeAt(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
-		ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
-	}
-	//else
-	//	parent->takeChild(parent->indexOfChild(taked));
-	*/
 }
 
 
@@ -140,7 +119,7 @@ void AvitoParser::otherItemWasChecked(QTreeWidgetItem* any) // закрываем открыты
 	if (offChanger) return;
 
 	int column = ui.treeWidget->currentColumn();
-	qDebug() << "Checked " << any->text(column) << ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()) << "Size PoolParse " << poolParse.length();/////////////////////////
+	//qDebug() << "Checked " << any->text(column) << ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()) << "Size PoolParse " << poolParse.length();/////////////////////////
 
 	if (any == middleItem && column == middleColumn)
 		return;
@@ -386,9 +365,9 @@ void AvitoParser::startingImportXml()
 }
 
 
-void AvitoParser::mousePressEvent(QMouseEvent* event) {
+void AvitoParser::mousePressEvent(QMouseEvent* event) 
+{
 	if (event->button() == Qt::LeftButton) {
-
 		ui.treeWidget->setCurrentItem(ui.treeWidget->invisibleRootItem());
 	}
 }

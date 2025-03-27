@@ -4,6 +4,7 @@ TelegramJacket::TelegramJacket(QObject *parent)
 	: QObject(parent)
 {}
 
+
 TelegramJacket::~TelegramJacket()
 {}
 
@@ -23,9 +24,6 @@ void TelegramJacket::getUpdates()
 	QObject::connect(reply, &QNetworkReply::finished, [reply, this]() {
 		if (reply->error() == QNetworkReply::NoError)
 		{
-			//qDebug() << reply->readAll();
-			//QByteArray responseData = reply->readAll();
-			//QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
 			QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
 
 			if (jsonDoc["ok"].toBool())
@@ -103,7 +101,6 @@ void TelegramJacket::sendMessage(const QString message)
 		});
 
 		*/
-	
 }
 
 const QString TelegramJacket::getChatId()

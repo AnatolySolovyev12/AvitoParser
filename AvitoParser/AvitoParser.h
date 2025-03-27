@@ -1,26 +1,18 @@
-
 #pragma once
 
 #include <QtWidgets/QMainWindow>
 #include "ui_AvitoParser.h"
-#include <QInputDialog>
 #include <QFileDialog>
 #include <QFile>
 #include <QXmlStreamWriter>
 #include <QXmlStreamAttribute>
-#include <QtSql/QtSql>
-#include <QTableWidgetItem>
-
 #include <QMouseEvent>
-
 #include <uniqueParseObject.h>
 #include "TelegramJacket.h"
 
-
-
-
-
-
+//#include <QInputDialog>
+//#include <QtSql/QtSql>
+//#include <QTableWidgetItem>
 
 class AvitoParser : public QMainWindow
 {
@@ -33,24 +25,13 @@ public:
 
     void addItemInList();
     void deleteItemInList();
-   
     void exportXml();
     void recursionXmlWriter(QTreeWidgetItem * some, QXmlStreamWriter& someXmlWriter);
-   
     void importXml();
     void loopXmlReader(QXmlStreamReader& xmlReader);
     void startingImportXml();
-
     void mousePressEvent(QMouseEvent* event);
-
     void initializationPoolFunc();
-
-
-
-
-
-
-
 
 private slots:
     void setData();
@@ -60,22 +41,21 @@ private slots:
 private:
     Ui::AvitoParserClass ui;
 
-    QTreeWidgetItem* middleItem = nullptr;
-    int middleColumn;
     bool offChanger = false;
-    QString line;
-    QSqlDatabase mw_db; // экземпляр подключения к БД
-
-    QTableWidgetItem* item = nullptr;
-    int countRow = 1;
-    QStatusBar* sBar;
-
     bool sortBool = true;
 
+    int middleColumn = 0;
+    int countRow = 1;
+
+    // QTableWidgetItem* item = nullptr;
+    // QSqlDatabase mw_db; // экземпляр подключения к БД
+
+    QTreeWidgetItem* middleItem = nullptr;
+    QStatusBar* sBar;
+
+    QString line;
+
     QList<QSharedPointer<uniqueParseObject>>poolParse;
-
     QTimer * timer = nullptr;
-
     TelegramJacket* tgObject = nullptr;
-
 };
