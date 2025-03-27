@@ -398,8 +398,6 @@ void AvitoParser::initializationPoolFunc()
 
 	for (int count = 0; count < countOfTopItems; count++)
 	{
-		//poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
-		//QObject::connect(poolParse[count].data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
 
 		auto newParser = QSharedPointer<uniqueParseObject>::create();
 

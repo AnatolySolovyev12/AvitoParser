@@ -60,7 +60,7 @@ void TelegramJacket::getUpdates()
 			qDebug() << "Error (TelegramJacket::getUpdates(2)): " << reply->error() << reply->errorString();
 		}
 
-		reply->deleteLater();
+		//reply->deleteLater();
 
 		});
 }
