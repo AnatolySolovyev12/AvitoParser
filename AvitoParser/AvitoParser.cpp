@@ -18,6 +18,9 @@ AvitoParser::AvitoParser(QWidget* parent)
 	connect(ui.pushButtonImport, &QPushButton::clicked, this, &AvitoParser::importXml);
 	connect(ui.pushButtonRefresh, &QPushButton::clicked, this, &AvitoParser::initializationPoolFunc);
 
+	connect(ui.pushButtonMassiveRef, &QPushButton::clicked, this, &AvitoParser::saveRefMassive);
+
+
 	QMainWindow::setStatusBar(sBar);
 
 	startingImportXml();
@@ -402,7 +405,35 @@ void AvitoParser::initializationPoolFunc()
 
 		newParser->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
 
+		newParser->setRefMassive();
+
 		poolParse.append(newParser);
 
 	}
+}
+
+
+
+void AvitoParser::saveRefMassive()
+{
+	if (ui.treeWidget->currentItem() == nullptr) return;
+
+	QList<QString>referenceList = poolParse[ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem())].data()->getRefMassive();
+
+	QFile file(ui.treeWidget->currentItem()->text(0) + "_RefMassive.txt");
+
+	if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
+	{
+		qWarning() << "Error:" + ui.treeWidget->currentItem()->text(0) + "_RefMassive.txt";
+		return;
+	}
+
+	QTextStream in(&file);
+
+	for (auto& val : referenceList)
+	{
+		in << val << '\n';
+	}
+
+	file.close();
 }

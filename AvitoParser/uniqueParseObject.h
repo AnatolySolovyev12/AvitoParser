@@ -20,6 +20,11 @@ public:
 	void generalParseFunc();
 	void fileParseFunc(const QByteArray& data);
 
+	QList<QString> getRefMassive();
+
+	void setRefMassive();
+
+
 signals:
 	void messageReceived(const QString&);
 

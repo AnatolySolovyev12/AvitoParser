@@ -1,6 +1,6 @@
 #include "uniqueParseObject.h"
 
-uniqueParseObject::uniqueParseObject(QObject *parent)
+uniqueParseObject::uniqueParseObject(QObject* parent)
 	: QObject(parent), classTimer(new QTimer())
 {
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
@@ -8,7 +8,7 @@ uniqueParseObject::uniqueParseObject(QObject *parent)
 
 void uniqueParseObject::generalParseFunc()
 {
-	try{
+	try {
 
 		if (!QUrl(m_URL).isValid()) // проверка соответствия адреса на корректность
 		{
@@ -168,3 +168,33 @@ void uniqueParseObject::classTimerIsDone()
 	generalParseFunc();
 }
 
+
+QList<QString> uniqueParseObject::getRefMassive()
+{
+	return referenceList;
+}
+
+
+void uniqueParseObject::setRefMassive()
+{
+	QFile file(m_name + "_RefMassive.txt");
+
+	if (!file.open(QIODevice::ReadOnly))
+	{
+		qDebug() << "Error in uniqueParseObject::setRefMassive(not find file or other):" << file.error();
+	}
+
+	QString line;
+
+	QTextStream in(&file);
+
+	while (!in.atEnd())
+	{
+		line = in.readLine();
+		referenceList.push_back(line);
+	}
+
+	file.close();
+
+	qDebug() << m_name << " count = " << referenceList.length();
+}

@@ -33,6 +33,8 @@ public:
     void closeEditor(QTreeWidgetItem* any);
     void otherItemWasChecked(QTreeWidgetItem* any);
 
+    void saveRefMassive();
+
 private:
     Ui::AvitoParserClass ui;
 
