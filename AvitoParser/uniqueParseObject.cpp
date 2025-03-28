@@ -140,8 +140,6 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 
 	QString temporary = m_URL; // обычный с сортировкой по дате
 
-	//qDebug() << m_URL;
-
 	temporary = temporary.remove("https://www.avito.ru");
 
 	int count = 0;
@@ -196,5 +194,5 @@ void uniqueParseObject::setRefMassive()
 
 	file.close();
 
-	qDebug() << m_name << " count = " << referenceList.length();
+	qDebug() << "\nStart in " << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " with count of reference: " + QString::number(referenceList.length());
 }
