@@ -82,6 +82,20 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 		qWarning() << "Error in uniqueParseObject::fileParseFunc:" << file.error();
 	}
 
+
+
+	QFile fileRef(m_name + "_RefMassive.txt");
+
+	if (!(fileRef.open(QIODevice::WriteOnly | QIODevice::Append))) // Truncate - для очистки содержимого файла
+	{
+		qWarning() << "Error: (addInRefMassive) " + m_name + "_RefMassive.txt" << fileRef.error();
+		return;
+	}
+
+	QTextStream inRef(&fileRef);
+
+
+
 	QTextStream in(&file);
 
 	in << data << Qt::endl;
@@ -112,6 +126,7 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 			if (referenceList.indexOf(temporary) == -1)
 			{
 				referenceList.push_back(temporary);
+				inRef << temporary << '\n';
 
 				if (firstAccumulateReferenceValue == 0)
 				{
@@ -122,6 +137,8 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 	}
 
 	file.close();
+
+	fileRef.close();
 }
 
 
@@ -157,7 +174,7 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 		subUrlString += val;
 	}
 
-	qDebug() << m_URL << subUrlString << "\n";
+	qDebug() << '\n' << m_URL << subUrlString << "\n";
 }
 
 
@@ -194,5 +211,5 @@ void uniqueParseObject::setRefMassive()
 
 	file.close();
 
-	qDebug() << "\nStart in " << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " with count of reference: " + QString::number(referenceList.length());
+	qDebug() << "Start in " << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " with count of reference: " + QString::number(referenceList.length());
 }

@@ -50,7 +50,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Deletes the selected object</string>
+     <string>Delete chised parse object</string>
     </property>
     <property name="text">
      <string>-</string>
@@ -146,7 +146,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Adds a child to the selected</string>
+     <string>Add new parse object</string>
     </property>
     <property name="text">
      <string>+</string>
@@ -162,7 +162,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Exports an object tree from XML</string>
+     <string>Refresh parse parameters for parse object</string>
     </property>
     <property name="text">
      <string>Rf</string>
@@ -191,10 +191,10 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Exports an object tree from XML</string>
+     <string>Save all references from choised parse object in .TXT file</string>
     </property>
     <property name="text">
-     <string>M</string>
+     <string>Sv</string>
     </property>
    </widget>
    <zorder>line_3</zorder>

@@ -24,7 +24,6 @@ public:
 
 	void setRefMassive();
 
-
 signals:
 	void messageReceived(const QString&);
 
