@@ -55,8 +55,11 @@ void uniqueParseObject::generalParseFunc()
 
 		if (countOfReference < referenceList.length())
 		{
-			qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length()) + '\n';
-			countOfReference = int(referenceList.length());
+			QTimer::singleShot(1000, [this](){
+
+				qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length()) + '\n';
+				countOfReference = int(referenceList.length());
+				});
 		}
 
 	}
@@ -92,12 +95,19 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 
 	in.seek(0);
 
+	int countterOfEntre = 0; // ограничиваемся первыми 30-ю записями для фильтрации
+
 	while (!in.atEnd())
 	{
 		QString line = in.readLine();
 
 		if (line.indexOf(prefix) != -1)
 		{
+			if (countterOfEntre >= 30)
+				break;
+
+			countterOfEntre++;
+
 			int index = line.indexOf(prefix) + prefix.length();
 
 			QString temporary;
@@ -139,9 +149,9 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 
 			qDebug() << potentialNewString << "   " << timeStamp;
 
-			if (timeStamp == "1 час назад")
+			if (timeStamp == "1 час назад") // берем самые актуальные записи
 			{
-				//if (firstAccumulateReferenceValue == 0)
+				if (firstAccumulateReferenceValue == 0) // приступаем к отправке после аккумуляции некоторой части записей
 				{
 					emit messageReceived(potentialNewString);
 					potentialNewString = "";

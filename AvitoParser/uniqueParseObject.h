@@ -42,7 +42,7 @@ private:
 
 	QList<QString>referenceList;
 
-	int firstAccumulateReferenceValue = 3;
+	int firstAccumulateReferenceValue = 5;
 	int countOfReference = 0;
 
 	QString subUrlString;
