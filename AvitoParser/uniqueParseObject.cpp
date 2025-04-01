@@ -37,30 +37,22 @@ void uniqueParseObject::generalParseFunc()
 
 		QSharedPointer<QNetworkReply>reply(nam.get(QNetworkRequest(QUrl(m_URL))));
 
-
-
 		if (!reply) {
 			throw std::runtime_error("Failed to create network request");
 		}
-
-
 
 		QTimer::singleShot(20000, &loop, &QEventLoop::quit);
 
 		loop.exec();
 
-
-
 		if (reply->error() != QNetworkReply::NoError) {
 			throw std::runtime_error(reply->errorString().toStdString());
 		}
-
 
 		fileParseFunc(reply->readAll());
 
 		//page++;// при многостраничном поиске
 
-		//if (true)
 		if (countOfReference < referenceList.length())
 		{
 			qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length()) + '\n';
@@ -71,7 +63,6 @@ void uniqueParseObject::generalParseFunc()
 	catch (const std::exception& e) {
 		qWarning() << "Error in uniqueParseObject::generalParseFunc:" << e.what();
 	}
-
 }
 
 
@@ -148,7 +139,7 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 
 			qDebug() << potentialNewString << "   " << timeStamp;
 
-			if (timeStamp == "3 часа назад")
+			if (timeStamp == "1 час назад")
 			{
 				//if (firstAccumulateReferenceValue == 0)
 				{

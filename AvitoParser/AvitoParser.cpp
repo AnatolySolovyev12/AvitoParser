@@ -413,7 +413,6 @@ void AvitoParser::initializationPoolFunc()
 }
 
 
-
 void AvitoParser::saveRefMassive()
 {
 	if (ui.treeWidget->currentItem() == nullptr) return;
