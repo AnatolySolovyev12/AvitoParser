@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QObject>
 #include <QNetworkAccessManager>
@@ -46,4 +46,6 @@ private:
 	int countOfReference = 0;
 
 	QString subUrlString;
+
+	QString potentialNewString;
 };

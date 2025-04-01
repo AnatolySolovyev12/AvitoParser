@@ -9,20 +9,7 @@ int main(int argc, char* argv[])
 	QApplication a(argc, argv);
 
 	AvitoParser w;
-    w.show();
-
-
-	QString str = "Привет, мир!";
-
-		//QString str = QString::fromUtf8("Привет, мир!");
-		//std::string stdStr = "Привет, мир!";
-	//QString str = QString::fromStdString(stdStr);
-
-		//QString str = QStringLiteral("Привет, мир!");
-
-
-
-
+	w.show();
 
 	a.exec();
 

@@ -1,4 +1,4 @@
-#include "uniqueParseObject.h"
+п»ї#include "uniqueParseObject.h"
 
 uniqueParseObject::uniqueParseObject(QObject* parent)
 	: QObject(parent), classTimer(new QTimer())
@@ -12,7 +12,7 @@ void uniqueParseObject::generalParseFunc()
 {
 	try {
 
-		if (!QUrl(m_URL).isValid()) // проверка соответствия адреса на корректность
+		if (!QUrl(m_URL).isValid()) // РїСЂРѕРІРµСЂРєР° СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ Р°РґСЂРµСЃР° РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ
 		{
 			qWarning() << "Invalid URL:" << m_URL;
 			return;
@@ -25,10 +25,10 @@ void uniqueParseObject::generalParseFunc()
 		QNetworkAccessManager nam;
 		nam.setAutoDeleteReplies(true);
 
-		//int page = 1;// при многостраничном поиске
-		//for (int val = 1; val <= 4; val++) // при многостраничном поиске
-			//QString temporaryUrl = urlString;// при многостраничном поиске
-			//temporaryUrl.insert((urlString.indexOf("cd=1") + 4), "&p=" + QString::number(page));// при многостраничном поиске
+		//int page = 1;// РїСЂРё РјРЅРѕРіРѕСЃС‚СЂР°РЅРёС‡РЅРѕРј РїРѕРёСЃРєРµ
+		//for (int val = 1; val <= 4; val++) // РїСЂРё РјРЅРѕРіРѕСЃС‚СЂР°РЅРёС‡РЅРѕРј РїРѕРёСЃРєРµ
+			//QString temporaryUrl = urlString;// РїСЂРё РјРЅРѕРіРѕСЃС‚СЂР°РЅРёС‡РЅРѕРј РїРѕРёСЃРєРµ
+			//temporaryUrl.insert((urlString.indexOf("cd=1") + 4), "&p=" + QString::number(page));// РїСЂРё РјРЅРѕРіРѕСЃС‚СЂР°РЅРёС‡РЅРѕРј РїРѕРёСЃРєРµ
 
 		QEventLoop loop;
 
@@ -57,7 +57,7 @@ void uniqueParseObject::generalParseFunc()
 
 		fileParseFunc(reply->readAll());
 
-		//page++;// при многостраничном поиске
+		//page++;// РїСЂРё РјРЅРѕРіРѕСЃС‚СЂР°РЅРёС‡РЅРѕРј РїРѕРёСЃРєРµ
 
 		//if (true)
 		if (countOfReference < referenceList.length())
@@ -76,27 +76,23 @@ void uniqueParseObject::generalParseFunc()
 
 void uniqueParseObject::fileParseFunc(const QByteArray& data)
 {
-	QFile file("BUFFER_" + m_name + ".txt"); // при многостраничном поиске создание нескольких файлов
+	QFile file("BUFFER_" + m_name + ".txt"); // РїСЂРё РјРЅРѕРіРѕСЃС‚СЂР°РЅРёС‡РЅРѕРј РїРѕРёСЃРєРµ СЃРѕР·РґР°РЅРёРµ РЅРµСЃРєРѕР»СЊРєРёС… С„Р°Р№Р»РѕРІ
 
-	if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
-		//if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - для добавления содержимого в файла
+	if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - РґР»СЏ РѕС‡РёСЃС‚РєРё СЃРѕРґРµСЂР¶РёРјРѕРіРѕ С„Р°Р№Р»Р°
+		//if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РІ С„Р°Р№Р»Р°
 	{
 		qWarning() << "Error in uniqueParseObject::fileParseFunc:" << file.error();
 	}
 
-
-
 	QFile fileRef(m_name + "_RefMassive.txt");
 
-	if (!(fileRef.open(QIODevice::WriteOnly | QIODevice::Append))) // Truncate - для очистки содержимого файла
+	if (!(fileRef.open(QIODevice::WriteOnly | QIODevice::Append))) // Truncate - РґР»СЏ РѕС‡РёСЃС‚РєРё СЃРѕРґРµСЂР¶РёРјРѕРіРѕ С„Р°Р№Р»Р°
 	{
 		qWarning() << "Error: (addInRefMassive) " + m_name + "_RefMassive.txt" << fileRef.error();
 		return;
 	}
 
 	QTextStream inRef(&fileRef);
-
-
 
 	QTextStream in(&file);
 
@@ -111,25 +107,60 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 		QString prefix = R"(data-marker="item-title" href=")" ;
 		QString stampPrefix = R"(data-marker="item-date">)";
 
-
+		
 		if (line.indexOf(prefix) != -1)
 		{
 			int index = line.indexOf(prefix) + prefix.length();
 
-			qDebug() << line.sliced(index);
+			QString temporary;
+
+			for (QString val : line.sliced(index))
+			{
+				if (val == ')' || val == ' ' || val == '?' || val == '&' || val == '"')
+				{
+					break;
+				}
+				temporary += val;
+			}
+
+			temporary.push_front("https://www.avito.ru");
+
+			if (referenceList.indexOf(temporary) == -1)
+			{
+				referenceList.push_back(temporary);
+				inRef << temporary << '\n';
+				potentialNewString = temporary;
+			}
 		}
+		
 
 		if (line.indexOf(stampPrefix) != -1)
 		{
 			int index = line.indexOf(stampPrefix) + stampPrefix.length();
 
-			qDebug() << line.sliced(index);
+			QString timeStamp;
+
+			for (QString val : line.sliced(index))
+			{
+				if (val == '<')
+				{
+					break;
+				}
+
+				timeStamp += val;
+			}
+
+			if (timeStamp == "1 С‡Р°СЃР° РЅР°Р·Р°Рґ")
+			{
+				if (firstAccumulateReferenceValue == 0)
+				{
+					emit messageReceived(potentialNewString);
+				}
+			}
 		}
 
 
-
 		if (false)
-		//if (line.indexOf(prefix) != -1)
 		{
 			int index = line.indexOf(prefix) + prefix.length();
 
@@ -166,24 +197,21 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 
 					
 					QString timeStamp;
-					/*
+					
 					for (QString val : line.sliced(index))
 					{
 
 						timeStamp += val;
-						break;
-						/*
+
 						if (val == '<')
 						{
 							break;
 						}
-						*/
 
-					
-					QString str = "Привет, мир!";
+					}
 
-					//if (timeStamp == "5 часов назад")
-					if (timeStamp == str)
+		
+					if (timeStamp == "1")
 					{
 						if (firstAccumulateReferenceValue == 0)
 						{
@@ -212,11 +240,11 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 	m_checkParse = checkParse;
 
 	if (m_checkParse)
-		classTimer->start(m_updateSecond.toInt()); // Каждые три секунды
+		classTimer->start(m_updateSecond.toInt()); // РљР°Р¶РґС‹Рµ С‚СЂРё СЃРµРєСѓРЅРґС‹
 	else
 		classTimer->stop();
 
-	QString temporary = m_URL; // обычный с сортировкой по дате
+	QString temporary = m_URL; // РѕР±С‹С‡РЅС‹Р№ СЃ СЃРѕСЂС‚РёСЂРѕРІРєРѕР№ РїРѕ РґР°С‚Рµ
 
 	temporary = temporary.remove("https://www.avito.ru");
 
