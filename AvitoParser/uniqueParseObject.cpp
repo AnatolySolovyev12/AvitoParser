@@ -4,6 +4,8 @@ uniqueParseObject::uniqueParseObject(QObject* parent)
 	: QObject(parent), classTimer(new QTimer())
 {
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
+
+
 }
 
 void uniqueParseObject::generalParseFunc()
@@ -106,9 +108,32 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 	{
 		QString line = in.readLine();
 
-		if (line.indexOf(subUrlString) != -1)
+		QString prefix = R"(data-marker="item-title" href=")" ;
+		QString stampPrefix = R"(data-marker="item-date">)";
+
+
+		if (line.indexOf(prefix) != -1)
 		{
-			int index = line.indexOf(subUrlString);
+			int index = line.indexOf(prefix) + prefix.length();
+
+			qDebug() << line.sliced(index);
+		}
+
+		if (line.indexOf(stampPrefix) != -1)
+		{
+			int index = line.indexOf(stampPrefix) + stampPrefix.length();
+
+			qDebug() << line.sliced(index);
+		}
+
+
+
+		if (false)
+		//if (line.indexOf(prefix) != -1)
+		{
+			int index = line.indexOf(prefix) + prefix.length();
+
+			qDebug() << line.sliced(index);
 
 			QString temporary;
 
@@ -125,14 +150,50 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 
 			if (referenceList.indexOf(temporary) == -1)
 			{
+
 				referenceList.push_back(temporary);
 				inRef << temporary << '\n';
 
-				if (firstAccumulateReferenceValue == 0)
+				line = in.readLine();
+
+				prefix = R"(data-marker="item-date">)";
+
+				if (line.indexOf(prefix) != -1)
 				{
-					emit messageReceived(referenceList.last());
+					int index = line.indexOf(prefix) + prefix.length();
+
+					qDebug() << line.sliced(index);
+
+					
+					QString timeStamp;
+					/*
+					for (QString val : line.sliced(index))
+					{
+
+						timeStamp += val;
+						break;
+						/*
+						if (val == '<')
+						{
+							break;
+						}
+						*/
+
+					
+				
+
+					//if (timeStamp == "5 часов назад")
+					if (timeStamp == "5")
+					{
+						if (firstAccumulateReferenceValue == 0)
+						{
+							emit messageReceived(referenceList.last());
+						}
+					}
 				}
+
 			}
+			
 		}
 	}
 
