@@ -5,7 +5,8 @@ uniqueParseObject::uniqueParseObject(QObject* parent)
 {
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
 
-
+	 prefix = R"(data-marker="item-title" href=")";
+	 stampPrefix = R"(data-marker="item-date">)";
 }
 
 void uniqueParseObject::generalParseFunc()
@@ -62,7 +63,7 @@ void uniqueParseObject::generalParseFunc()
 		//if (true)
 		if (countOfReference < referenceList.length())
 		{
-			qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length());
+			qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length()) + '\n';
 			countOfReference = int(referenceList.length());
 		}
 
@@ -104,10 +105,6 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 	{
 		QString line = in.readLine();
 
-		QString prefix = R"(data-marker="item-title" href=")" ;
-		QString stampPrefix = R"(data-marker="item-date">)";
-
-		
 		if (line.indexOf(prefix) != -1)
 		{
 			int index = line.indexOf(prefix) + prefix.length();
@@ -133,8 +130,7 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 			}
 		}
 		
-
-		if (line.indexOf(stampPrefix) != -1)
+		if (line.indexOf(stampPrefix) != -1 && potentialNewString != "")
 		{
 			int index = line.indexOf(stampPrefix) + stampPrefix.length();
 
@@ -150,78 +146,18 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 				timeStamp += val;
 			}
 
-			if (timeStamp == "1 часа назад")
+			qDebug() << potentialNewString << "   " << timeStamp;
+
+			if (timeStamp == "3 часа назад")
 			{
-				if (firstAccumulateReferenceValue == 0)
+				//if (firstAccumulateReferenceValue == 0)
 				{
 					emit messageReceived(potentialNewString);
+					potentialNewString = "";
 				}
 			}
-		}
 
-
-		if (false)
-		{
-			int index = line.indexOf(prefix) + prefix.length();
-
-			qDebug() << line.sliced(index);
-
-			QString temporary;
-
-			for (QString val : line.sliced(index))
-			{
-				if (val == ')' || val == ' ' || val == '?' || val == '&' || val == '"')
-				{
-					break;
-				}
-				temporary += val;
-			}
-
-			temporary.push_front("https://www.avito.ru");
-
-			if (referenceList.indexOf(temporary) == -1)
-			{
-
-				referenceList.push_back(temporary);
-				inRef << temporary << '\n';
-
-				line = in.readLine();
-
-				prefix = R"(data-marker="item-date">)";
-
-				if (line.indexOf(prefix) != -1)
-				{
-					int index = line.indexOf(prefix) + prefix.length();
-
-					qDebug() << line.sliced(index);
-
-					
-					QString timeStamp;
-					
-					for (QString val : line.sliced(index))
-					{
-
-						timeStamp += val;
-
-						if (val == '<')
-						{
-							break;
-						}
-
-					}
-
-		
-					if (timeStamp == "1")
-					{
-						if (firstAccumulateReferenceValue == 0)
-						{
-							emit messageReceived(referenceList.last());
-						}
-					}
-				}
-
-			}
-			
+			potentialNewString = "";
 		}
 	}
 

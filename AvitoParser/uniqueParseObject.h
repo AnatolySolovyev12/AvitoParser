@@ -42,10 +42,13 @@ private:
 
 	QList<QString>referenceList;
 
-	int firstAccumulateReferenceValue = 5;
+	int firstAccumulateReferenceValue = 3;
 	int countOfReference = 0;
 
 	QString subUrlString;
 
 	QString potentialNewString;
+
+	QString prefix;
+	QString stampPrefix;
 };
