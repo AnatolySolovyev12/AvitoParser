@@ -180,10 +180,10 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 						*/
 
 					
-				
+					QString str = "Привет, мир!";
 
 					//if (timeStamp == "5 часов назад")
-					if (timeStamp == "5")
+					if (timeStamp == str)
 					{
 						if (firstAccumulateReferenceValue == 0)
 						{
