@@ -57,7 +57,7 @@ void uniqueParseObject::generalParseFunc()
 		{
 			QTimer::singleShot(1000, [this](){
 
-				qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length()) + '\n';
+				qDebug() << "\n" << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " count of reference: " + QString::number(referenceList.length()) << '\n';
 				countOfReference = int(referenceList.length());
 				});
 		}
@@ -103,7 +103,7 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 
 		if (line.indexOf(prefix) != -1)
 		{
-			if (countterOfEntre >= 30)
+			if (countterOfEntre >= 6)
 				break;
 
 			countterOfEntre++;
