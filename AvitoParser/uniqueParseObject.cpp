@@ -24,7 +24,7 @@ void uniqueParseObject::generalParseFunc()
 
 		QNetworkProxyFactory::setUseSystemConfiguration(true);
 		QNetworkAccessManager nam;
-		nam.setAutoDeleteReplies(true);
+		//nam.setAutoDeleteReplies(true);
 
 		//int page = 1;// при многостраничном поиске
 		//for (int val = 1; val <= 4; val++) // при многостраничном поиске

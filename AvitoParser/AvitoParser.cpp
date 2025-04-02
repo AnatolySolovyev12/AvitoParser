@@ -1,7 +1,7 @@
 #include "AvitoParser.h"
 
 AvitoParser::AvitoParser(QWidget* parent)
-	: QMainWindow(parent), timer(new QTimer()), tgObject(new TelegramJacket), sBar(new QStatusBar())
+	: QMainWindow(parent), timer(new QTimer()), sBar(new QStatusBar()), tgObject(new TelegramJacket)
 {
 	ui.setupUi(this);
 
@@ -19,7 +19,6 @@ AvitoParser::AvitoParser(QWidget* parent)
 	connect(ui.pushButtonRefresh, &QPushButton::clicked, this, &AvitoParser::initializationPoolFunc);
 
 	connect(ui.pushButtonMassiveRef, &QPushButton::clicked, this, &AvitoParser::saveRefMassive);
-
 
 	QMainWindow::setStatusBar(sBar);
 
@@ -59,10 +58,16 @@ void AvitoParser::addItemInList()
 
 	offChanger = false;
 
-	poolParse.push_back(QSharedPointer<uniqueParseObject>::create());
+	poolParse.append(QSharedPointer<uniqueParseObject>::create());
 	//poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
-	poolParse.last()->setParam(ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(0), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(1), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(2), ui.treeWidget->topLevelItem(poolParse.length() - 1)->checkState(3));
-	QObject::connect(poolParse.last().data(), SIGNAL(messageReceived(QString)), tgObject, SLOT(sendMessage(QString))); // выводим новые ссылки полученные при парсинге в
+	poolParse.last().data()->setParam(ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(0), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(1), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(2), ui.treeWidget->topLevelItem(poolParse.length() - 1)->checkState(3));
+	
+	poolParse.last().data()->setRefMassive();
+
+	connect(poolParse.last().data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage);
+
+
+
 
 	any = nullptr;
 }
@@ -398,17 +403,13 @@ void AvitoParser::initializationPoolFunc()
 
 	for (int count = 0; count < countOfTopItems; count++)
 	{
+		poolParse.append(QSharedPointer<uniqueParseObject>::create());
 
-		auto newParser = QSharedPointer<uniqueParseObject>::create();
+		poolParse.last().data()->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
 
-		connect(newParser.data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage);
+		poolParse.last().data()->setRefMassive();
 
-		newParser->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
-
-		newParser->setRefMassive();
-
-		poolParse.append(newParser);
-
+		connect(poolParse.last().data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage);
 	}
 }
 
