@@ -12,7 +12,6 @@ uniqueParseObject::uniqueParseObject(QObject* parent)
 void uniqueParseObject::generalParseFunc()
 {
 	try {
-
 		if (!QUrl(m_URL).isValid()) // проверка соответствия адреса на корректность
 		{
 			qWarning() << "Invalid URL:" << m_URL;
@@ -25,11 +24,6 @@ void uniqueParseObject::generalParseFunc()
 		QNetworkProxyFactory::setUseSystemConfiguration(true);
 		QNetworkAccessManager nam;
 		//nam.setAutoDeleteReplies(true);
-
-		//int page = 1;// при многостраничном поиске
-		//for (int val = 1; val <= 4; val++) // при многостраничном поиске
-			//QString temporaryUrl = urlString;// при многостраничном поиске
-			//temporaryUrl.insert((urlString.indexOf("cd=1") + 4), "&p=" + QString::number(page));// при многостраничном поиске
 
 		QEventLoop loop;
 
@@ -50,8 +44,6 @@ void uniqueParseObject::generalParseFunc()
 		}
 
 		fileParseFunc(reply->readAll());
-
-		//page++;// при многостраничном поиске
 
 		if (countOfReference < referenceList.length())
 		{
