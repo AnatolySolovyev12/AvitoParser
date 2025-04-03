@@ -168,7 +168,7 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 	m_updateSecond = updateSecond;
 	m_checkParse = checkParse;
 
-	//temporaryName = m_name;
+	temporaryName = m_name; // для дебагинга
 
 	if (m_checkParse)
 		classTimer->start(m_updateSecond.toInt()); // Каждые три секунды

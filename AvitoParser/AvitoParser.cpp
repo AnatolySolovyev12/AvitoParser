@@ -451,7 +451,7 @@ void AvitoParser::generalFuncForTimer()
 		remaining.append(val.data()->getTimer()->remainingTime());
 	}
 
-	//qDebug() << remaining;
+	//qDebug() << remaining; // для дебагинга
 
 	auto minElementItFirst = std::min_element(remaining.begin(), remaining.end());
 	int indexFirst = std::distance(remaining.begin(), minElementItFirst);
@@ -473,7 +473,7 @@ void AvitoParser::generalFuncForTimer()
 
 		if ((remaining[indexSecond] - valMin) < 8000)
 		{
-			//qDebug() << "NOW THIS TIMERS IS DONE TOGETHER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval();
+			//qDebug() << "NOW THIS BOTH TIMER'S CROSS FRONTIER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval(); // для дебагинга
 
 			int stopedInterval = poolParse[indexFirst].data()->getTimer()->interval();
 
@@ -491,7 +491,7 @@ void AvitoParser::generalFuncForTimer()
 	{
 		if ((valMax - valMin) < 8000)
 		{
-			//qDebug() << "NOW THIS TIMERS IS DONE TOGETHER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval();
+			//qDebug() << "BOTH TIMER CROSS FRONTIER"; // для дебагинга
 
 			int stopedInterval = poolParse[indexMax].data()->getTimer()->interval();
 

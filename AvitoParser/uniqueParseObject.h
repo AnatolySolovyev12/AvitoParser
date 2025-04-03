@@ -27,7 +27,7 @@ public:
 
 	QTimer* getTimer();
 
-	//QString temporaryName;
+	QString temporaryName; // для дебагинга
 
 signals:
 	void messageReceived(const QString&);
