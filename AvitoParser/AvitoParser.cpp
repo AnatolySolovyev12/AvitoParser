@@ -450,7 +450,7 @@ void AvitoParser::generalFuncForTimer()
 		remaining.append(val.data()->getTimer()->remainingTime());
 	}
 
-	qDebug() << remaining;
+	//qDebug() << remaining;
 
 	auto minElementItFirst = std::min_element(remaining.begin(), remaining.end());
 	int indexFirst = std::distance(remaining.begin(), minElementItFirst);
