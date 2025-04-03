@@ -461,24 +461,47 @@ void AvitoParser::generalFuncForTimer()
 
 	int valMin = remaining[indexFirst];
 
-	remaining[indexFirst] = remaining[indexMax];
+	int valMax = remaining[indexMax];
 
-	minElementItFirst = std::min_element(remaining.begin(), remaining.end());
-
-	int indexSecond = std::distance(remaining.begin(), minElementItFirst);
-
-	if ((remaining[indexSecond] - valMin) < 8000)
+	if (remaining.length() > 2)
 	{
-		//qDebug() << "NOW THIS TIMERS IS DONE TOGETHER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval();
+		remaining[indexFirst] = remaining[indexMax];
 
-		int stopedInterval = poolParse[indexFirst].data()->getTimer()->interval();
+		minElementItFirst = std::min_element(remaining.begin(), remaining.end());
 
-		poolParse[indexFirst].data()->getTimer()->stop();
+		int indexSecond = std::distance(remaining.begin(), minElementItFirst);
 
-		QTimer::singleShot(8000, [=]() {
+		if ((remaining[indexSecond] - valMin) < 8000)
+		{
+			//qDebug() << "NOW THIS TIMERS IS DONE TOGETHER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval();
 
-			poolParse[indexFirst].data()->getTimer()->start(stopedInterval);
+			int stopedInterval = poolParse[indexFirst].data()->getTimer()->interval();
 
-			});
+			poolParse[indexFirst].data()->getTimer()->stop();
+
+			QTimer::singleShot(8000, [=]() {
+
+				poolParse[indexFirst].data()->getTimer()->start(stopedInterval);
+
+				});
+		}
+	}
+
+	if (remaining.length() == 2)
+	{
+		if ((valMax - valMin) < 8000)
+		{
+			//qDebug() << "NOW THIS TIMERS IS DONE TOGETHER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval();
+
+			int stopedInterval = poolParse[indexMax].data()->getTimer()->interval();
+
+			poolParse[indexMax].data()->getTimer()->stop();
+
+			QTimer::singleShot(8000, [=]() {
+
+				poolParse[indexMax].data()->getTimer()->start(stopedInterval);
+
+				});
+		}
 	}
 }
