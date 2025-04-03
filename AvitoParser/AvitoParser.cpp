@@ -438,6 +438,7 @@ void AvitoParser::saveRefMassive()
 	file.close();
 }
 
+
 void AvitoParser::generalFuncForTimer()
 {
 	if (poolParse.length() <= 1)

@@ -10,6 +10,7 @@ uniqueParseObject::uniqueParseObject(QObject* parent)
 	 stampPrefix = R"(data-marker="item-date">)";
 }
 
+
 void uniqueParseObject::generalParseFunc()
 {
 	try {
@@ -160,7 +161,6 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 }
 
 
-
 void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond, bool checkParse)
 {
 	m_name = name;
@@ -233,6 +233,7 @@ void uniqueParseObject::setRefMassive()
 
 	qDebug() << "Start in " << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " with count of reference: " + QString::number(referenceList.length());
 }
+
 
 QTimer* uniqueParseObject::getTimer()
 {
