@@ -35,6 +35,8 @@ public:
 
     void saveRefMassive();
 
+    void generalFuncForTimer();
+
 private:
     Ui::AvitoParserClass ui;
 
@@ -51,5 +53,6 @@ private:
 
     QList<QSharedPointer<uniqueParseObject>>poolParse;
     QTimer * timer = nullptr;
+    QTimer* timerSemafor = nullptr;
     TelegramJacket* tgObject = nullptr;
 };

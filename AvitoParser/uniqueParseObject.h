@@ -25,6 +25,10 @@ public:
 
 	void setRefMassive();
 
+	QTimer* getTimer();
+
+	QString temporaryName;
+
 signals:
 	void messageReceived(const QString&);
 

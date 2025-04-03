@@ -1,7 +1,7 @@
 #include "AvitoParser.h"
 
 AvitoParser::AvitoParser(QWidget* parent)
-	: QMainWindow(parent), timer(new QTimer()), sBar(new QStatusBar()), tgObject(new TelegramJacket)
+	: QMainWindow(parent), timer(new QTimer()), sBar(new QStatusBar()), tgObject(new TelegramJacket), timerSemafor(new QTimer())
 {
 	ui.setupUi(this);
 
@@ -26,7 +26,10 @@ AvitoParser::AvitoParser(QWidget* parent)
 	initializationPoolFunc();
 
 	connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
-	timer->start(12000); // Проверяем каждые 5 секунд
+	timer->start(12000);
+
+	//connect(timerSemafor, &QTimer::timeout, this, &AvitoParser::generalFuncForTimer);
+	//timerSemafor->start(2000); 
 }
 
 
@@ -51,6 +54,7 @@ void AvitoParser::addItemInList()
 	offChanger = true;
 
 	any->setText(0, "new");
+	any->setText(2, "15000");
 
 	any->setBackground(0, QColor(221, 221, 221, 255));
 	any->setBackground(1, QColor(245, 216, 183, 255));
@@ -113,9 +117,9 @@ void AvitoParser::closeEditor(QTreeWidgetItem* any) // слот закрытия редактора в
 		any->setBackground(3, QColor(128, 243, 150, 255));
 		any->setCheckState(3, any->checkState(3));
 
-		if (any->text(2).toInt() < 13000) // красим если что-то написано в серийнике
+		if (any->text(2).toInt() < 15000) // красим если что-то написано в серийнике
 		{
-			any->setText(2, "13000");
+			any->setText(2, "15000");
 		}
 
 		offChanger = false;
@@ -436,4 +440,48 @@ void AvitoParser::saveRefMassive()
 	}
 
 	file.close();
+}
+
+void AvitoParser::generalFuncForTimer()
+{
+	if (poolParse.length() <= 1)
+		return;
+
+	QList<int>remaining;
+
+	for (auto& val : poolParse)
+	{
+		remaining.append(val.data()->getTimer()->remainingTime());
+	}
+
+	qDebug() << remaining;
+
+	auto minElementItFirst = std::min_element(remaining.begin(), remaining.end());
+	int indexFirst = std::distance(remaining.begin(), minElementItFirst);
+
+	auto maxElement = std::max_element(remaining.begin(), remaining.end());
+	int indexMax = std::distance(remaining.begin(), maxElement);
+
+	int valMin = remaining[indexFirst];
+
+	remaining[indexFirst] = remaining[indexMax];
+
+	minElementItFirst = std::min_element(remaining.begin(), remaining.end());
+
+	int indexSecond = std::distance(remaining.begin(), minElementItFirst);
+
+	if ((remaining[indexSecond] - valMin) < 8000)
+	{
+		qDebug() << "NOW THIS TIMERS IS DONE TOGETHER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval();
+
+		int stopedInterval = poolParse[indexFirst].data()->getTimer()->interval();
+
+		poolParse[indexFirst].data()->getTimer()->stop();
+
+		QTimer::singleShot(8000, [=]() {
+
+			poolParse[indexFirst].data()->getTimer()->start(stopedInterval);
+
+			});
+	}
 }

@@ -4,6 +4,7 @@ uniqueParseObject::uniqueParseObject(QObject* parent)
 	: QObject(parent), classTimer(new QTimer())
 {
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
+	classTimer->stop();
 
 	 prefix = R"(data-marker="item-title" href=")";
 	 stampPrefix = R"(data-marker="item-date">)";
@@ -167,7 +168,7 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 	m_URL = URL;
 	m_updateSecond = updateSecond;
 	m_checkParse = checkParse;
-
+	temporaryName = m_name;
 	if (m_checkParse)
 		classTimer->start(m_updateSecond.toInt()); // Каждые три секунды
 	else
@@ -198,7 +199,8 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 
 void uniqueParseObject::classTimerIsDone()
 {
-	generalParseFunc();
+	qDebug() << m_name << " is DONE!";
+	//generalParseFunc();
 }
 
 
@@ -230,4 +232,9 @@ void uniqueParseObject::setRefMassive()
 	file.close();
 
 	qDebug() << "Start in " << QDateTime::currentDateTime().toString() << "(" + m_name + ")" + " with count of reference: " + QString::number(referenceList.length());
+}
+
+QTimer* uniqueParseObject::getTimer()
+{
+	return classTimer;
 }
