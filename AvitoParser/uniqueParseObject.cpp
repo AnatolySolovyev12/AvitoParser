@@ -24,7 +24,6 @@ void uniqueParseObject::generalParseFunc()
 
 		QNetworkProxyFactory::setUseSystemConfiguration(true);
 		QNetworkAccessManager nam;
-		//nam.setAutoDeleteReplies(true);
 
 		QEventLoop loop;
 
@@ -168,7 +167,9 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 	m_URL = URL;
 	m_updateSecond = updateSecond;
 	m_checkParse = checkParse;
-	temporaryName = m_name;
+
+	//temporaryName = m_name;
+
 	if (m_checkParse)
 		classTimer->start(m_updateSecond.toInt()); // Каждые три секунды
 	else
@@ -199,8 +200,7 @@ void uniqueParseObject::setParam(QString name, QString URL, QString updateSecond
 
 void uniqueParseObject::classTimerIsDone()
 {
-	qDebug() << m_name << " is DONE!";
-	//generalParseFunc();
+	generalParseFunc();
 }
 
 

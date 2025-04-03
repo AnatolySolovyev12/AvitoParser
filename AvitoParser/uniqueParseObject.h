@@ -27,7 +27,7 @@ public:
 
 	QTimer* getTimer();
 
-	QString temporaryName;
+	//QString temporaryName;
 
 signals:
 	void messageReceived(const QString&);

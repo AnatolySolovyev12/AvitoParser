@@ -28,8 +28,8 @@ AvitoParser::AvitoParser(QWidget* parent)
 	connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
 	timer->start(12000);
 
-	//connect(timerSemafor, &QTimer::timeout, this, &AvitoParser::generalFuncForTimer);
-	//timerSemafor->start(2000); 
+	connect(timerSemafor, &QTimer::timeout, this, &AvitoParser::generalFuncForTimer);
+	timerSemafor->start(2000); 
 }
 
 
@@ -69,9 +69,6 @@ void AvitoParser::addItemInList()
 	poolParse.last().data()->setRefMassive();
 
 	connect(poolParse.last().data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage);
-
-
-
 
 	any = nullptr;
 }
@@ -284,7 +281,6 @@ void AvitoParser::importXml()
 	txtFile.close();
 
 	initializationPoolFunc();
-
 }
 
 
@@ -472,7 +468,7 @@ void AvitoParser::generalFuncForTimer()
 
 	if ((remaining[indexSecond] - valMin) < 8000)
 	{
-		qDebug() << "NOW THIS TIMERS IS DONE TOGETHER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval();
+		//qDebug() << "NOW THIS TIMERS IS DONE TOGETHER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval();
 
 		int stopedInterval = poolParse[indexFirst].data()->getTimer()->interval();
 
