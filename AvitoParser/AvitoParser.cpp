@@ -32,7 +32,7 @@ AvitoParser::AvitoParser(QWidget* parent)
 
 	QTimer::singleShot(7000, [=]() {
 
-		timerSemafor->start(3000);
+		timerSemafor->start(2000);
 
 		});
 
@@ -429,7 +429,7 @@ void AvitoParser::initializationPoolFunc()
 
 	QTimer::singleShot(7000, [=]() {
 
-		timerSemafor->start(3000);
+		timerSemafor->start(2000);
 
 		});
 }
@@ -470,7 +470,7 @@ void AvitoParser::generalFuncForTimer()
 	for (auto& val : poolParse)
 	{
 		if (val.data()->getTimer()->remainingTime() == -1)
-			remaining.append((10000 + countOfTopItems * 5000));
+			remaining.append((20000 + countOfTopItems * 5000));
 		else
 			remaining.append(val.data()->getTimer()->remainingTime());
 	}
@@ -485,7 +485,7 @@ void AvitoParser::generalFuncForTimer()
 
 	int valMin = remaining[indexFirst];
 
-	if (valMin > 12000) return;
+	if (valMin > (5000 + (poolParse.length() * 3000))) return;
 
 	int valMax = remaining[indexMax];
 
@@ -497,7 +497,7 @@ void AvitoParser::generalFuncForTimer()
 
 		int indexSecond = std::distance(remaining.begin(), minElementItFirst);
 
-		if ((remaining[indexSecond] - valMin) < 6000)
+		if ((remaining[indexSecond] - valMin) < 5000)
 		{
 			qDebug() << "NOW THIS BOTH TIMER'S CROSS FRONTIER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->remainingTime() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->remainingTime(); // для дебагинга
 
@@ -505,7 +505,7 @@ void AvitoParser::generalFuncForTimer()
 
 			poolParse[indexFirst].data()->getTimer()->stop();
 
-			QTimer::singleShot(6000, [=]() {
+			QTimer::singleShot(2000, [=]() {
 
 				poolParse[indexFirst].data()->getTimer()->start(stopedInterval);
 
@@ -515,7 +515,7 @@ void AvitoParser::generalFuncForTimer()
 
 	if (remaining.length() == 2)
 	{
-		if ((valMax - valMin) < 6000)
+		if ((valMax - valMin) < 5000)
 		{
 			qDebug() << "BOTH TIMER CROSS FRONTIER"; // для дебагинга
 
@@ -523,7 +523,7 @@ void AvitoParser::generalFuncForTimer()
 
 			poolParse[indexMax].data()->getTimer()->stop();
 
-			QTimer::singleShot(6000, [=]() {
+			QTimer::singleShot(2000, [=]() {
 
 				poolParse[indexMax].data()->getTimer()->start(stopedInterval);
 
