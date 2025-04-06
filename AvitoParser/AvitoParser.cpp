@@ -67,6 +67,7 @@ void AvitoParser::addItemInList()
 	any->setBackground(0, QColor(221, 221, 221, 255));
 	any->setBackground(1, QColor(245, 216, 183, 255));
 	any->setBackground(2, QColor(217, 225, 187, 255));
+	any->setCheckState(3, any->checkState(3));
 
 	offChanger = false;
 
@@ -116,30 +117,26 @@ void AvitoParser::closeEditor(QTreeWidgetItem* any) // слот закрытия редактора в
 	QString temporary = any->text(2).trimmed(); // убираем пробелы
 	any->setText(2, temporary);
 
-	if (any->text(2) != "") // красим если что-то написано в серийнике
+	offChanger = true;
+
+	any->setCheckState(3, any->checkState(3));
+
+	if (any->text(2).toInt() < (10000 + countOfTopItems * 5000)) // красим если что-то написано в серийнике
 	{
-		offChanger = true;
+		any->setText(2, QString::number((10000 + countOfTopItems * 5000)));
+	}
 
-		any->setBackground(3, QColor(128, 243, 150, 255));
-		any->setCheckState(3, any->checkState(3));
-
-		if (any->text(2).toInt() < (10000 + countOfTopItems * 5000)) // красим если что-то написано в серийнике
-		{
-			any->setText(2, QString::number((10000 + countOfTopItems * 5000)));
-		}
-
-		offChanger = false;
+	if (any->checkState(3) == Qt::Unchecked) // красим если что-то написано в серийнике
+	{
+		any->setBackground(3, QColor("white"));
 	}
 	else
 	{
-		offChanger = true;
-
-		any->setBackground(3, QColor("white"));
-		any->setData(3, Qt::CheckStateRole, QVariant());
-		any->setText(3, "");
-
-		offChanger = false;
+		any->setBackground(3, QColor(128, 243, 150, 255));
 	}
+
+	offChanger = false;
+
 	ui.treeWidget->closePersistentEditor(middleItem, middleColumn); // закрываем редактор
 }
 
