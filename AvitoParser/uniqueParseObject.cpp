@@ -13,6 +13,8 @@ uniqueParseObject::uniqueParseObject(QObject* parent)
 
 void uniqueParseObject::generalParseFunc()
 {
+	qDebug() << m_name << " is DONE"; // для дебага
+
 	try {
 		if (!QUrl(m_URL).isValid()) // проверка соответствия адреса на корректность
 		{

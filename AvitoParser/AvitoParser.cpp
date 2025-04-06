@@ -29,7 +29,13 @@ AvitoParser::AvitoParser(QWidget* parent)
 	timer->start(12000);
 
 	connect(timerSemafor, &QTimer::timeout, this, &AvitoParser::generalFuncForTimer);
-	timerSemafor->start(2000); 
+
+	QTimer::singleShot(7000, [=]() {
+
+		timerSemafor->start(2000);
+
+		});
+
 }
 
 
@@ -49,23 +55,26 @@ void AvitoParser::addItemInList()
 	else
 		return;
 
+	countOfTopItems = ui.treeWidget->topLevelItemCount();
+
 	int column = ui.treeWidget->currentColumn();
 
 	offChanger = true;
 
 	any->setText(0, "new");
-	any->setText(2, "15000");
+	any->setText(2, QString::number((10000 + countOfTopItems * 5000)));
 
 	any->setBackground(0, QColor(221, 221, 221, 255));
 	any->setBackground(1, QColor(245, 216, 183, 255));
 	any->setBackground(2, QColor(217, 225, 187, 255));
+	any->setCheckState(3, any->checkState(3));
 
 	offChanger = false;
 
 	poolParse.append(QSharedPointer<uniqueParseObject>::create());
 	//poolParse.push_back(QSharedPointer<uniqueParseObject>(new uniqueParseObject));
 	poolParse.last().data()->setParam(ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(0), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(1), ui.treeWidget->topLevelItem(poolParse.length() - 1)->text(2), ui.treeWidget->topLevelItem(poolParse.length() - 1)->checkState(3));
-	
+
 	poolParse.last().data()->setRefMassive();
 
 	connect(poolParse.last().data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage);
@@ -77,6 +86,7 @@ void AvitoParser::addItemInList()
 void AvitoParser::deleteItemInList()
 {
 	if (ui.treeWidget->currentItem() == nullptr) return;
+	countOfTopItems = ui.treeWidget->topLevelItemCount();
 
 	poolParse.removeAt(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
 	ui.treeWidget->takeTopLevelItem(ui.treeWidget->indexOfTopLevelItem(ui.treeWidget->currentItem()));
@@ -107,30 +117,26 @@ void AvitoParser::closeEditor(QTreeWidgetItem* any) // слот закрытия редактора в
 	QString temporary = any->text(2).trimmed(); // убираем пробелы
 	any->setText(2, temporary);
 
-	if (any->text(2) != "") // красим если что-то написано в серийнике
+	offChanger = true;
+
+	any->setCheckState(3, any->checkState(3));
+
+	if (any->text(2).toInt() < (10000 + countOfTopItems * 5000)) // красим если что-то написано в серийнике
 	{
-		offChanger = true;
+		any->setText(2, QString::number((10000 + countOfTopItems * 5000)));
+	}
 
-		any->setBackground(3, QColor(128, 243, 150, 255));
-		any->setCheckState(3, any->checkState(3));
-
-		if (any->text(2).toInt() < 15000) // красим если что-то написано в серийнике
-		{
-			any->setText(2, "15000");
-		}
-
-		offChanger = false;
+	if (any->checkState(3) == Qt::Unchecked) // красим если что-то написано в серийнике
+	{
+		any->setBackground(3, QColor("white"));
 	}
 	else
 	{
-		offChanger = true;
-
-		any->setBackground(3, QColor("white"));
-		any->setData(3, Qt::CheckStateRole, QVariant());
-		any->setText(3, "");
-
-		offChanger = false;
+		any->setBackground(3, QColor(128, 243, 150, 255));
 	}
+
+	offChanger = false;
+
 	ui.treeWidget->closePersistentEditor(middleItem, middleColumn); // закрываем редактор
 }
 
@@ -340,6 +346,8 @@ void AvitoParser::loopXmlReader(QXmlStreamReader& xmlReader)
 
 		if (xmlReader.isEndElement())
 			myList.pop_back();
+
+		countOfTopItems = ui.treeWidget->topLevelItemCount();
 	}
 }
 
@@ -388,7 +396,7 @@ void AvitoParser::startingImportXml()
 }
 
 
-void AvitoParser::mousePressEvent(QMouseEvent* event) 
+void AvitoParser::mousePressEvent(QMouseEvent* event)
 {
 	if (event->button() == Qt::LeftButton) {
 		ui.treeWidget->setCurrentItem(ui.treeWidget->invisibleRootItem());
@@ -397,12 +405,19 @@ void AvitoParser::mousePressEvent(QMouseEvent* event)
 
 void AvitoParser::initializationPoolFunc()
 {
-	int countOfTopItems = ui.treeWidget->topLevelItemCount();
+	countOfTopItems = ui.treeWidget->topLevelItemCount();
 
 	poolParse.clear();
 
+	timerSemafor->stop();
+
 	for (int count = 0; count < countOfTopItems; count++)
 	{
+		if (ui.treeWidget->topLevelItem(count)->text(2).toInt() < (10000 + countOfTopItems * 5000)) // красим если что-то написано в серийнике
+		{
+			ui.treeWidget->topLevelItem(count)->setText(2, QString::number((10000 + countOfTopItems * 5000)));
+		}
+
 		poolParse.append(QSharedPointer<uniqueParseObject>::create());
 
 		poolParse.last().data()->setParam(ui.treeWidget->topLevelItem(count)->text(0), ui.treeWidget->topLevelItem(count)->text(1), ui.treeWidget->topLevelItem(count)->text(2), ui.treeWidget->topLevelItem(count)->checkState(3));
@@ -411,6 +426,12 @@ void AvitoParser::initializationPoolFunc()
 
 		connect(poolParse.last().data(), &uniqueParseObject::messageReceived, tgObject, &TelegramJacket::sendMessage);
 	}
+
+	QTimer::singleShot(7000, [=]() {
+
+		timerSemafor->start(2000);
+
+		});
 }
 
 
@@ -448,10 +469,13 @@ void AvitoParser::generalFuncForTimer()
 
 	for (auto& val : poolParse)
 	{
-		remaining.append(val.data()->getTimer()->remainingTime());
+		if (val.data()->getTimer()->remainingTime() == -1)
+			remaining.append((20000 + countOfTopItems * 5000));
+		else
+			remaining.append(val.data()->getTimer()->remainingTime());
 	}
 
-	//qDebug() << remaining; // для дебагинга
+	qDebug() << remaining; // для дебагинга
 
 	auto minElementItFirst = std::min_element(remaining.begin(), remaining.end());
 	int indexFirst = std::distance(remaining.begin(), minElementItFirst);
@@ -460,6 +484,8 @@ void AvitoParser::generalFuncForTimer()
 	int indexMax = std::distance(remaining.begin(), maxElement);
 
 	int valMin = remaining[indexFirst];
+
+	if (valMin > (5000 + (poolParse.length() * 3000))) return;
 
 	int valMax = remaining[indexMax];
 
@@ -471,15 +497,15 @@ void AvitoParser::generalFuncForTimer()
 
 		int indexSecond = std::distance(remaining.begin(), minElementItFirst);
 
-		if ((remaining[indexSecond] - valMin) < 8000)
+		if ((remaining[indexSecond] - valMin) < 5000)
 		{
-			//qDebug() << "NOW THIS BOTH TIMER'S CROSS FRONTIER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->interval() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->interval(); // для дебагинга
+			qDebug() << "NOW THIS BOTH TIMER'S CROSS FRONTIER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->remainingTime() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->remainingTime(); // для дебагинга
 
 			int stopedInterval = poolParse[indexFirst].data()->getTimer()->interval();
 
 			poolParse[indexFirst].data()->getTimer()->stop();
 
-			QTimer::singleShot(8000, [=]() {
+			QTimer::singleShot(2000, [=]() {
 
 				poolParse[indexFirst].data()->getTimer()->start(stopedInterval);
 
@@ -489,15 +515,15 @@ void AvitoParser::generalFuncForTimer()
 
 	if (remaining.length() == 2)
 	{
-		if ((valMax - valMin) < 8000)
+		if ((valMax - valMin) < 5000)
 		{
-			//qDebug() << "BOTH TIMER CROSS FRONTIER"; // для дебагинга
+			qDebug() << "BOTH TIMER CROSS FRONTIER"; // для дебагинга
 
 			int stopedInterval = poolParse[indexMax].data()->getTimer()->interval();
 
 			poolParse[indexMax].data()->getTimer()->stop();
 
-			QTimer::singleShot(8000, [=]() {
+			QTimer::singleShot(2000, [=]() {
 
 				poolParse[indexMax].data()->getTimer()->start(stopedInterval);
 

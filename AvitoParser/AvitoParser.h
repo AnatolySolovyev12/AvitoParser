@@ -55,4 +55,6 @@ private:
     QTimer * timer = nullptr;
     QTimer* timerSemafor = nullptr;
     TelegramJacket* tgObject = nullptr;
+
+    int countOfTopItems;
 };
