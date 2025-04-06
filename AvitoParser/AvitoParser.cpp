@@ -485,7 +485,7 @@ void AvitoParser::generalFuncForTimer()
 
 	int valMin = remaining[indexFirst];
 
-	if (valMin > 10000) return;
+	if (valMin > 12000) return;
 
 	int valMax = remaining[indexMax];
 
@@ -505,7 +505,7 @@ void AvitoParser::generalFuncForTimer()
 
 			poolParse[indexFirst].data()->getTimer()->stop();
 
-			QTimer::singleShot(3000, [=]() {
+			QTimer::singleShot(6000, [=]() {
 
 				poolParse[indexFirst].data()->getTimer()->start(stopedInterval);
 
@@ -523,7 +523,7 @@ void AvitoParser::generalFuncForTimer()
 
 			poolParse[indexMax].data()->getTimer()->stop();
 
-			QTimer::singleShot(3000, [=]() {
+			QTimer::singleShot(6000, [=]() {
 
 				poolParse[indexMax].data()->getTimer()->start(stopedInterval);
 
