@@ -10,6 +10,15 @@
 #include <uniqueParseObject.h>
 #include "TelegramJacket.h"
 
+
+
+#include <QSystemTrayIcon>
+#include <QMenu>
+#include <QAction>
+#include <QMainWindow>
+
+#include <windows.h>
+
 class AvitoParser : public QMainWindow
 {
     Q_OBJECT
@@ -34,8 +43,18 @@ public:
     void otherItemWasChecked(QTreeWidgetItem* any);
 
     void saveRefMassive();
-
     void generalFuncForTimer();
+
+
+
+
+
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void cmdOpen();
+    void cmdClose();
+
+
+
 
 private:
     Ui::AvitoParserClass ui;
@@ -57,4 +76,10 @@ private:
     TelegramJacket* tgObject = nullptr;
 
     int countOfTopItems;
+
+
+    QSystemTrayIcon* trayIcon = nullptr;
+    QDateTime fullTimeWork;
+
+    bool windowShow = false;
 };
