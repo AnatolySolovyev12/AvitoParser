@@ -499,7 +499,7 @@ void AvitoParser::generalFuncForTimer()
 
 		if ((remaining[indexSecond] - valMin) < 4000)
 		{
-			qDebug() << "NOW THIS BOTH TIMER'S CROSS FRONTIER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->remainingTime() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->remainingTime(); // для дебагинга
+			//qDebug() << "NOW THIS BOTH TIMER'S CROSS FRONTIER: " << poolParse[indexFirst].data()->temporaryName << " - " << poolParse[indexFirst].data()->getTimer()->remainingTime() << " and " << poolParse[indexSecond].data()->temporaryName << " - " << poolParse[indexSecond].data()->getTimer()->remainingTime(); // для дебагинга
 
 			int stopedInterval = poolParse[indexFirst].data()->getTimer()->interval();
 
@@ -517,7 +517,7 @@ void AvitoParser::generalFuncForTimer()
 	{
 		if ((valMax - valMin) < 4000)
 		{
-			qDebug() << "BOTH TIMER CROSS FRONTIER"; // для дебагинга
+			//qDebug() << "BOTH TIMER CROSS FRONTIER"; // для дебагинга
 
 			int stopedInterval = poolParse[indexMax].data()->getTimer()->interval();
 
