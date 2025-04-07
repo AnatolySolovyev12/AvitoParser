@@ -5,9 +5,6 @@ AvitoParser::AvitoParser(QWidget* parent)
 {
 	ui.setupUi(this);
 
-
-
-
 	trayIcon = new QSystemTrayIcon(this);
 	trayIcon->setIcon(QIcon("icon.png"));
 
@@ -25,26 +22,12 @@ AvitoParser::AvitoParser(QWidget* parent)
 
 	connect(trayIcon, &QSystemTrayIcon::activated, this, &AvitoParser::iconActivated);
 
-
-
-
-
-
-
-
-
-
-
-
-
 	connect(ui.pushButtonAdd, &QPushButton::clicked, this, &AvitoParser::addItemInList);
 	connect(ui.pushButtonAddMinus, &QPushButton::clicked, this, &AvitoParser::deleteItemInList);
-
 
 	connect(ui.treeWidget, &QTreeWidget::itemDoubleClicked, this, &AvitoParser::setData);
 	connect(ui.treeWidget, &QTreeWidget::itemChanged, this, &AvitoParser::closeEditor);
 	connect(ui.treeWidget, &QTreeWidget::itemClicked, this, &AvitoParser::otherItemWasChecked);
-
 
 	connect(ui.pushButtonExport, &QPushButton::clicked, this, &AvitoParser::exportXml);
 	connect(ui.pushButtonImport, &QPushButton::clicked, this, &AvitoParser::importXml);
@@ -67,7 +50,6 @@ AvitoParser::AvitoParser(QWidget* parent)
 		timerSemafor->start(2000);
 
 		});
-
 }
 
 
@@ -565,16 +547,20 @@ void AvitoParser::generalFuncForTimer()
 }
 
 
-
-
-
-
-
 void AvitoParser::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
 	if (reason == QSystemTrayIcon::ActivationReason::DoubleClick) // требуется корректировка вывода часов переведённых в сутки или в часах свыше 24
 	{
-		
+		if (!windowShow)
+		{
+			this->show();
+			windowShow = true;
+		}
+		else
+		{
+			this->hide();
+			windowShow = false;
+		}
 	}
 }
 

@@ -55,6 +55,7 @@ public:
 
 
 
+
 private:
     Ui::AvitoParserClass ui;
 
@@ -79,4 +80,6 @@ private:
 
     QSystemTrayIcon* trayIcon = nullptr;
     QDateTime fullTimeWork;
+
+    bool windowShow = false;
 };
