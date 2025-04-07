@@ -10,6 +10,8 @@ int main(int argc, char* argv[])
 
 	AvitoParser w;
 	w.show();
+	w.setWindowIcon(QIcon("icon.png"));
+	w.setWindowTitle("AvitoParser by Solovev");
 
 	a.exec();
 

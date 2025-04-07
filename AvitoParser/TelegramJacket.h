@@ -10,6 +10,8 @@
 #include <QJsonArray>
 #include <QTimer>
 #include <QUrlQuery>
+#include <windows.h>
+
 
 class TelegramJacket : public QObject
 {

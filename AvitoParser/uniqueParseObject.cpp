@@ -3,6 +3,8 @@
 uniqueParseObject::uniqueParseObject(QObject* parent)
 	: QObject(parent), classTimer(new QTimer())
 {
+	AttachConsole(ATTACH_PARENT_PROCESS);
+
 	connect(classTimer, &QTimer::timeout, this, &uniqueParseObject::classTimerIsDone);
 	classTimer->stop();
 
