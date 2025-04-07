@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QTimer>
 #include <QDateTime>
+#include <windows.h>
 
 
 class uniqueParseObject : public QObject

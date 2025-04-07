@@ -5,6 +5,38 @@ AvitoParser::AvitoParser(QWidget* parent)
 {
 	ui.setupUi(this);
 
+
+
+
+	trayIcon = new QSystemTrayIcon(this);
+	trayIcon->setIcon(QIcon("icon.png"));
+
+	QMenu* menu = new QMenu(this);
+	QAction* restoreAction = menu->addAction("CMD open and connect");
+	QAction* restoreActionHide = menu->addAction("CMD disconnect");
+	QAction* quitAction = menu->addAction("Exit");
+
+	connect(restoreAction, &QAction::triggered, this, &AvitoParser::cmdOpen);
+	connect(restoreActionHide, &QAction::triggered, this, &AvitoParser::cmdClose);
+	connect(quitAction, &QAction::triggered, qApp, &QApplication::quit);
+
+	trayIcon->setContextMenu(menu);
+	trayIcon->setVisible(true);
+
+	connect(trayIcon, &QSystemTrayIcon::activated, this, &AvitoParser::iconActivated);
+
+
+
+
+
+
+
+
+
+
+
+
+
 	connect(ui.pushButtonAdd, &QPushButton::clicked, this, &AvitoParser::addItemInList);
 	connect(ui.pushButtonAddMinus, &QPushButton::clicked, this, &AvitoParser::deleteItemInList);
 
@@ -530,4 +562,37 @@ void AvitoParser::generalFuncForTimer()
 				});
 		}
 	}
+}
+
+
+
+
+
+
+
+void AvitoParser::iconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+	if (reason == QSystemTrayIcon::ActivationReason::DoubleClick) // требуется корректировка вывода часов переведённых в сутки или в часах свыше 24
+	{
+		
+	}
+}
+
+
+void AvitoParser::cmdOpen()
+{
+	AllocConsole(); // Создаем консоль и присоединяем к ней текущий процесс
+	FILE* stream;
+	freopen_s(&stream, "CONOUT$", "w", stdout); // Перенаправляем стандартный вывод
+	freopen_s(&stream, "CONOUT$", "w", stderr); // Перенаправляем стандартный вывод ошибок
+
+	printf("\nOpen console for logout\n\n");
+}
+
+
+void AvitoParser::cmdClose()
+{
+	qDebug() << "\nProgramm disconnect from console.";
+
+	FreeConsole(); // Отделяем процесс от cmd. После cmd закрываем руками.
 }
