@@ -117,8 +117,8 @@ void TelegramJacket::sendMessage(const QString message)
 		}
 		reply->deleteLater();
 		});
-
-		*/
+*/
+		
 }
 
 

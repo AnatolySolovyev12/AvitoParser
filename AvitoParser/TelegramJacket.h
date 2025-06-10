@@ -31,7 +31,7 @@ public slots:
 	void sendMessage(const QString message);
 
 public:
-	QString token = ""; // SolovevAA617AvitoParser
+	QString token = "";
 	qint64 iD;
 	const QString chatId = "1443295378";
 
