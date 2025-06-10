@@ -358,7 +358,7 @@ void AvitoParser::loopXmlReader(QXmlStreamReader& xmlReader)
 			AvitoParser::closeEditor(some);
 		}
 
-		if (xmlReader.isEndElement())
+		if (xmlReader.isEndElement() && !myList.isEmpty())
 			myList.pop_back();
 
 		countOfTopItems = ui.treeWidget->topLevelItemCount();
