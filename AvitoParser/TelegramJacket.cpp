@@ -4,6 +4,7 @@ TelegramJacket::TelegramJacket(QObject *parent)
 	: QObject(parent), manager(new QNetworkAccessManager)
 {
 	AttachConsole(ATTACH_PARENT_PROCESS);
+	token = getTokenFromFile();
 }
 
 
@@ -125,4 +126,32 @@ void TelegramJacket::sendMessage(const QString message)
 const QString TelegramJacket::getChatId()
 {
 	return chatId;
+}
+
+
+
+QString TelegramJacket::getTokenFromFile()
+{
+	QFile file("token.txt");
+
+	if (!file.open(QIODevice::ReadOnly))
+	{
+		qDebug() << "Don't find browse file. Add a directory with a token (token.txt).";
+		return 0;
+	}
+
+	QTextStream out(&file);
+
+	QString myLine = out.readLine(); // метод readLine() считывает одну строку из потока
+
+	if (myLine == "")
+	{
+		qDebug() << "Don't find browse file. Add a directory with a token (token.txt).";
+		file.close();
+		return 0;
+	}
+
+	file.close();
+
+	return myLine;
 }
