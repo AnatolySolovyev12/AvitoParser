@@ -68,7 +68,7 @@ void uniqueParseObject::generalParseFunc()
 
 void uniqueParseObject::fileParseFunc(const QByteArray& data)
 {
-	QFile file("BUFFER_" + m_name + ".txt"); // при многостраничном поиске создание нескольких файлов
+	QFile file(QCoreApplication::applicationDirPath() + "\\BUFFER_" + m_name + ".txt"); // при многостраничном поиске создание нескольких файлов
 
 	if (!(file.open(QIODevice::ReadWrite | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
 		//if (!(file.open(QIODevice::ReadWrite | QIODevice::Append))) // Append - для добавления содержимого в файла
@@ -76,7 +76,7 @@ void uniqueParseObject::fileParseFunc(const QByteArray& data)
 		qWarning() << "Error in uniqueParseObject::fileParseFunc:" << file.error();
 	}
 
-	QFile fileRef(m_name + "_RefMassive.txt");
+	QFile fileRef(QCoreApplication::applicationDirPath() + "\\" + m_name + "_RefMassive.txt");
 
 	if (!(fileRef.open(QIODevice::WriteOnly | QIODevice::Append))) // Truncate - для очистки содержимого файла
 	{
@@ -216,7 +216,7 @@ QList<QString> uniqueParseObject::getRefMassive()
 
 void uniqueParseObject::setRefMassive()
 {
-	QFile file(m_name + "_RefMassive.txt");
+	QFile file(QCoreApplication::applicationDirPath() + "\\" + m_name + "_RefMassive.txt");
 
 	if (!file.open(QIODevice::ReadOnly))
 	{

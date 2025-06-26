@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include<qapplication.h>
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QEventLoop>
