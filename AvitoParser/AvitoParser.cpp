@@ -6,7 +6,7 @@ AvitoParser::AvitoParser(QWidget* parent)
 	ui.setupUi(this);
 
 	trayIcon = new QSystemTrayIcon(this);
-	trayIcon->setIcon(QIcon("icon.png"));
+	trayIcon->setIcon(QIcon(QCoreApplication::applicationDirPath() + "\\icon.png"));
 
 	QMenu* menu = new QMenu(this);
 	QAction* restoreAction = menu->addAction("CMD open and connect");
@@ -282,7 +282,7 @@ void AvitoParser::importXml()
 
 	file.close();
 
-	QFile txtFile("tree.txt");
+	QFile txtFile(QCoreApplication::applicationDirPath() + "\\tree.txt");
 
 	if (!(txtFile.open(QIODevice::WriteOnly | QIODevice::Truncate))) // Truncate - для очистки содержимого файла
 	{
@@ -370,7 +370,7 @@ void AvitoParser::startingImportXml()
 {
 	/* Открываем файл для Чтения с помощью пути, указанного в lineEditWrite */
 
-	QFile file("tree.txt");
+	QFile file(QCoreApplication::applicationDirPath() + "\\tree.txt");
 
 	if (!file.open(QIODevice::ReadOnly))
 	{
