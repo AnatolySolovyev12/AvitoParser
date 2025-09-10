@@ -8,10 +8,6 @@ TelegramJacket::TelegramJacket(QObject *parent)
 }
 
 
-TelegramJacket::~TelegramJacket()
-{}
-
-
 void TelegramJacket::getUpdates()
 {
 	/*
@@ -127,7 +123,6 @@ const QString TelegramJacket::getChatId()
 {
 	return chatId;
 }
-
 
 
 QString TelegramJacket::getTokenFromFile()
