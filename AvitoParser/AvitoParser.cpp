@@ -40,12 +40,18 @@ AvitoParser::AvitoParser(QWidget* parent)
 	startingImportXml();
 	initializationPoolFunc();
 
-	connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
-	timer->start(12000);
+	//connect(timer, &QTimer::timeout, tgObject, &TelegramJacket::getUpdates);
+	//timer->start(12000);
+
+	QTimer::singleShot(3000, [this]() {
+
+		tgObject->getUpdates();
+
+		});
 
 	connect(timerSemafor, &QTimer::timeout, this, &AvitoParser::generalFuncForTimer);
 
-	QTimer::singleShot(7000, [=]() {
+	QTimer::singleShot(7000, [this]() {
 
 		timerSemafor->start(2000);
 

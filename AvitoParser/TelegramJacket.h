@@ -20,7 +20,6 @@ class TelegramJacket : public QObject
 
 public:
 	TelegramJacket(QObject* parent = nullptr);
-	~TelegramJacket();
 
 	void getUpdates();
 
@@ -37,8 +36,8 @@ public:
 	QString token = "";
 	qint64 iD;
 	const QString chatId = "1443295378";
+	bool isBusy = false;
 
 private:
 	QNetworkAccessManager* manager = nullptr;
-
 };
